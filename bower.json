@@ -1,0 +1,27 @@
+{
+  "name": "knockout-paging",
+  "main": "dist",
+  "version": "0.1.0",
+  "homepage": "https://github.com/ErikSchierboom/knockout-paging",
+  "authors": [
+    "Erik Schierboom <erik_schierboom@hotmail.com>"
+  ],
+  "description": "Adds binding handlers to Knockout (KO) that are initialized using paging content (HTML).",
+  "keywords": [
+    "knockout",
+    "foreach",
+    "paging",
+    "initialize",
+    "javascript"
+  ],
+  "license": "Apache",
+  "ignore": [
+    "**/*",
+    "node_modules",
+    "bower_components",
+    "spec"
+  ],
+  "dependencies": {
+    "knockout": "^3.2.0"
+  }
+}

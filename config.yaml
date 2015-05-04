@@ -1,0 +1,34 @@
+header: |
+  /*!
+    Knockout paged extender v{{ version }}
+    By: Erik Schierboom (C) 2015
+    License: Apache 2
+
+    Adds the paged extender that can add paging functionality to an
+    observable array.
+  */
+  (function (root, factory) {
+    if (typeof define === 'function' && define.amd) {
+      define(['knockout'], factory);
+    } else if (typeof exports === 'object') {
+      module.exports = factory(require('knockout'));
+    } else {
+      root.KnockoutElse = factory(root.ko);
+    }
+  }(this, function (ko) {
+
+footer: |
+  }));
+
+webserver:
+  port: 4054
+  directoryListing: true
+  open: spec/runner.html
+  livereload:
+    enable: true
+    port: 4055
+
+watch:
+  index.js
+  spec/*
+  config.yaml

@@ -94,6 +94,8 @@ The best way to install this library is using [Bower](http://bower.io/):
 
     bower install knockout-paging
 
+The library is also available from a [CDN](https://cdnjs.com/libraries/knockout-paging).
+
 ## Demos
 There is a [JSBin demo](http://jsbin.com/liruyo/) that shows how the `paged` extender can be used.
 

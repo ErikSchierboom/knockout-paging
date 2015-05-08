@@ -14,7 +14,7 @@ var target = ko.observableArray();
 target.extend({ paged: {} });
 ```
 
-After extending the observable array with the `paged` extender, the observable array will have observables, computed values and functions added to it.
+After extending the observable array with the `paged` extender, the observable array will have new observables, computed values and functions added to it.
 
 ### Observables
 
@@ -30,15 +30,29 @@ target.pageSize(10);
 target.pageNumber(3);
 ```
 
-If you want to override the default values, just specify them as parameters when extending the observable array:
+#### Defaults 
+
+If you want to override the default, initial values, for a single paged observable array, just specify them as parameters:
 
 ```js
 target.extend({ paged: { pageNumber: 3, pageSize: 25 } });
 ```
 
+You can also define global defaults in `ko.paging.defaults`:
+
+```js
+ko.paging.defaults.pageNumber = 2;
+ko.paging.defaults.pageSize = 25;
+
+// Create a paged observable array uses the global defaults
+target.extend({ paged: {} });
+target.pageNumber(); // Returns 2
+target.pageNSize();  // Returns 25
+```
+
 ### Computed values
 
-The following read-only computed values are added: 
+The following *read-only* computed values are added: 
 
 * `pageItems`: the array items on the current page.
 * `pageCount`: the total number of pages.
@@ -49,6 +63,7 @@ The following read-only computed values are added:
 * `hasNextPage`: indicates if there is a next page.
 * `isFirstPage`: indicates if the current page is the first page.
 * `isLastPage`:  indicates if the current page is the last page.
+* `pages`: an array of pages.
 
 The following example shows how these values can be used:
 
@@ -65,6 +80,7 @@ target.hasPreviousPage; // Returns false
 target.hasNextPage;     // Returns true
 target.isFirstPage;     // Returns true
 target.isLastPage;      // Returns false
+target.pages;           // Returns [1, 2, 3]
 ```
 
 ### Functions
@@ -89,6 +105,127 @@ target.toPreviousPage(); // pageNumber becomes 2
 target.toFirstPage();    // pageNumber becomes 1
 ```
 
+### Page generators
+
+As we saw earlier, the `pages` computed observable returns an array of page numbers. It generates page through a concept known a page generators. Out of the box, there are two page generators you can use:
+
+- Simple page generator: returns all pages.
+- Sliding page generator: returns current page and some pages surrounding.
+
+#### Simple page generator
+
+The simple page generator simply returns all available pages. The following example shows how to use the *simple* page generator:
+
+```js
+var input = [1,2,3,4,5,6,7,8,9];
+
+// Create a paged observable array using the 'simple' page generater
+var simple = ko.observableArray(input).extend({ 
+  paged: { 
+    pageSize: 2, 
+    pageGenerator: 'simple'
+  } 
+});
+```
+
+The `simple` paged observable array will now use the simple page generator in its `pages` observable:
+
+```js
+// The returned pages are simply all available pages
+simple.pages; // Returns [1, 2, 3, 4, 5]
+
+// Changing the page number does not change the returned pages
+simple.pageNumber(3);
+simple.pages; // Returns [1, 2, 3, 4, 5]
+```
+
+#### Sliding page generator
+
+Although the simple page generator is fine for a small number of pages, it becomes unwieldy when there are many pages. This is where the *sliding* page generator shines, as it only returns the current page and some pages surrounding it.
+
+This example shows how to use the `sliding` page generator:
+
+```js
+var input = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
+
+// Create a paged observable array using the 'sliding' page generater
+var sliding = ko.observableArray(input).extend({ 
+  paged: { 
+    pageSize: 2, 
+    pageGenerator: 'sliding' 
+  } 
+});
+```
+
+The `sliding` paged observable array will use the sliding page generator in its `pages` observable:
+
+```js
+// Returned pages is a window around the current page
+sliding.pages; // Returns [1, 2, 3, 4, 5]
+
+// Changing the page number changes the returned pages
+sliding.pageNumber(7);
+sliding.pages; // Returns [5, 6, 7, 8, 9]
+```
+
+As can be seen, the sliding page generator returns the current page number and some pages left and right of it. By default, the window size is equal to five, which means that two items to the left and two items to the right of the current page are also returned.
+
+You can easily change the *sliding* generator's window size:
+
+```js
+sliding.pageNumber(7);
+sliding.pageGenerator.windowSize(3);
+sliding.pages; // Returns [6, 7, 8]
+```
+
+Note: as the sliding page generator is the default option, the following two statements are equivalent:
+
+```js
+ko.observableArray(input).extend({ paged: { pageGenerator: 'sliding' } });
+ko.observableArray(input).extend({ paged: {} });
+```
+
+#### Custom page generators
+
+You can also supply your own page generator. First, you define an object that has a `generate` function. This function takes a paged observable array as its parameter and should return an array of pages.
+
+The following custom page generator is an adaptation of the simple page generator, but one that starts with zero:
+
+```js
+function CustomPageGenerator() {
+  this.generate = function(pagedObservable) {
+    return createRange(0, pagedObservable.pageCount() - 1);
+  }
+}
+```
+
+To be able to use this custom generator, we have to add it to `ko.paging.generators`:
+
+```js
+ko.paging.generators['custom'] = new CustomPageGenerator();
+```
+
+The key in which you stored the page generator is what you should specify in the `pageGenerator` parameter when extending the observable array:
+
+```js
+var input = [1,2,3,4,5,6,7,8,9];
+
+// Create a paged observable array using our 'custom' page generater
+var custom = ko.observableArray(input).extend({ 
+  paged: { 
+    pageSize: 2, 
+    pageGenerator: 'custom'
+  } 
+});
+```
+
+The `custom` paged observable array will now use our custom page generator in its `pages` observable:
+
+```js
+// The returned pages are now zero-based
+custom.pages; // Returns [0, 1, 2, 3, 4]
+```
+
 ## Installation
 The best way to install this library is using [Bower](http://bower.io/):
 
@@ -107,7 +244,12 @@ There is a [JSBin demo](http://jsbin.com/liruyo/) that shows how the `paged` ext
      <th>Changes</th>
   </tr>
   <tr>
-     <td>2014-04-11</td>
+     <td>2014-05-09</td>
+     <td>0.2.0</td>
+     <td>Added page generator support.</td>
+  </tr>
+  <tr>
+     <td>2014-05-06</td>
      <td>0.1.0</td>
      <td>None. Initial version.</td>
   </tr>

@@ -20,7 +20,11 @@ describe("paged extender", function () {
   beforeEach(function() {
     var options = { pageSize: 3 };
 
-    // Reset the observable arrays each test run
+    // Reset the defaults
+    ko.paging.defaults.pageNumber = 1;
+    ko.paging.defaults.pageSize = 50;
+
+    // Reset the observable arrays
     emptyObservableArray = ko.observableArray([]).extend({ paged: options });
     singlePageObservableArray = ko.observableArray([1]).extend({ paged: options });
     smallNumberPagesObservableArray = ko.observableArray(createRange(1, 7)).extend({ paged: options });
@@ -128,7 +132,7 @@ describe("paged extender", function () {
     it("isLastPage is true", function () {
       assert.isTrue(singlePageObservableArray.isLastPage());
     });
-    
+      
     it("pageItems returns all array elements", function () {
       assert.deepEqual(singlePageObservableArray.pageItems(), singlePageObservableArray());
     });
@@ -629,6 +633,27 @@ describe("paged extender", function () {
           assert.deepEqual(newPages, createRange(0, 1));
         });
       });
+    });
+  });
+  
+  context("created using ko.pagedObservableArray", function () {
+    it("works without parameters", function () {
+      var pagedObservableArray = ko.pagedObservableArray();
+      assert.deepEqual(pagedObservableArray(), []);
+      assert.deepEqual(pagedObservableArray.pageNumber(), 1);
+    });
+
+    it("works with array parameter", function () {
+      var pagedObservableArray = ko.pagedObservableArray([1, 2, 3]);
+      assert.deepEqual(pagedObservableArray(), [1, 2, 3]);
+      assert.deepEqual(pagedObservableArray.pageNumber(), 1);
+    });
+
+    it("works with array and options parameters", function () {
+      var options = { pageSize: 2 };
+      var pagedObservableArray = ko.pagedObservableArray([1, 2, 3], options);
+      assert.deepEqual(pagedObservableArray(), [1, 2, 3]);
+      assert.deepEqual(pagedObservableArray.pageSize(), 2);
     });
   });
 });

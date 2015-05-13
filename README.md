@@ -10,11 +10,20 @@ This library adds an extender to Knockout that can add paging functionality to o
 Using the library is simple. Just call the `extend` method on your observable array with `paged` as its key:
 
 ```js
+var options = {};
 var target = ko.observableArray();
-target.extend({ paged: {} });
+target.extend({ paged: options });
 ```
 
 After extending the observable array with the `paged` extender, the observable array will have new observables, computed values and functions added to it.
+
+You can also use `ko.pagedObservableArray()`, which calls `ko.observableArray()` and applies the `paged` extender to it: 
+
+```js
+var emptyShort   = ko.pagedObservableArray(); 
+var valueShort   = ko.pagedObservableArray([1, 2, 3]); 
+var optionsShort = ko.pagedObservableArray([1, 2, 3], { pageSize: 2 }); 
+```
 
 ### Observables
 
@@ -246,6 +255,11 @@ There is a [JSBin demo](http://jsbin.com/liruyo/) that shows how the `paged` ext
      <th>Date</th>
      <th>Version</th>
      <th>Changes</th>
+  </tr>
+  <tr>
+     <td>2014-05-13</td>
+     <td>0.2.1</td>
+     <td>Added ko.pagedObservableArray shortcut method.</td>
   </tr>
   <tr>
      <td>2014-05-09</td>

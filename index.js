@@ -9,6 +9,10 @@ function isObservableArray(value) {
   return ko.isObservable(value) && 'push' in value;
 }
 
+function isArray(value) {
+  return value.constructor === Array;
+}
+
 function createRange(min, max) {
   var list = [];
 
@@ -181,4 +185,10 @@ ko.extenders.paged = function(target, options) {
   };
 
   return target;
+};
+
+// Add a wrapper function to the main ko object to allow for easier creation of
+// paged observable arrays
+ko.pagedObservableArray = function (initialValue, options) {
+  return ko.observableArray(initialValue).extend({ paged: options });    
 };

@@ -231,6 +231,10 @@ The best way to install this library is using [Bower](http://bower.io/):
 
     bower install knockout-paging
 
+You can also install the library using NPM:
+
+    npm install knockout-paging --save-dev
+
 The library is also available from a [CDN](https://cdnjs.com/libraries/knockout-paging).
 
 ## Demos

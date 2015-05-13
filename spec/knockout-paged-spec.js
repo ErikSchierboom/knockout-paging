@@ -38,7 +38,7 @@ describe("paged extender", function () {
     });
   });
     
-  context("on empty observable", function () {
+  context("on empty paged observable array", function () {
     it("itemCount is 0", function () {
       assert.strictEqual(emptyObservableArray.itemCount(), 0);
     });
@@ -100,7 +100,7 @@ describe("paged extender", function () {
     });
   });
     
-  context("on single-page observable", function () {    
+  context("on single-page paged observable array", function () {    
     it("itemCount is number of elements in array", function () {
       assert.strictEqual(singlePageObservableArray.itemCount(), singlePageObservableArray().length);
     });
@@ -162,7 +162,7 @@ describe("paged extender", function () {
     });
   });
     
-  context("on multi-page observable", function () {    
+  context("on multi-page paged observable array", function () {    
     context("with current page is first page", function () {
       beforeEach(function() {
         smallNumberPagesObservableArray.pageNumber(1);
@@ -454,6 +454,18 @@ describe("paged extender", function () {
         });
       });
     });
+
+    context("with initial value is", function() {
+      it("empty array works", function () {
+        var pagedArray = ko.observableArray([]).extend({ paged: {} });
+        assert.deepEqual(pagedArray(), []);
+      });
+  
+      it("non-empty array works", function () {
+        var pagedArray = ko.observableArray([1, 2, 3]).extend({ paged: {} });
+        assert.deepEqual(pagedArray(), [1, 2, 3]);
+      });
+    });
   });
   
   context("observable value", function () {
@@ -643,7 +655,13 @@ describe("paged extender", function () {
       assert.deepEqual(pagedObservableArray.pageNumber(), 1);
     });
 
-    it("works with array parameter", function () {
+    it("works with empty array parameter", function () {
+      var pagedObservableArray = ko.pagedObservableArray([]);
+      assert.deepEqual(pagedObservableArray(), []);
+      assert.deepEqual(pagedObservableArray.pageNumber(), 1);
+    });
+
+    it("works with non-empty array parameter", function () {
       var pagedObservableArray = ko.pagedObservableArray([1, 2, 3]);
       assert.deepEqual(pagedObservableArray(), [1, 2, 3]);
       assert.deepEqual(pagedObservableArray.pageNumber(), 1);

@@ -57,7 +57,7 @@ ko.paging.defaults.pageSize = 25;
 // Create a paged observable array uses the global defaults
 target.extend({ paged: {} });
 target.pageNumber(); // Returns 2
-target.pageNSize();  // Returns 25
+target.pageSize();   // Returns 25
 ```
 
 ### Computed values
@@ -81,16 +81,16 @@ The following example shows how these values can be used:
 var target = ko.observableArray([2, 3, 5, 9, 11]);
 target.extend({ paged: { pageSize: 2 } });
 
-target.pageItems;       // Returns [2, 3]
-target.pageCount;       // Returns 3
-target.itemCount;       // Returns 5
-target.firstItemOnPage; // Returns 1
-target.lastItemOnPage;  // Returns 2
-target.hasPreviousPage; // Returns false
-target.hasNextPage;     // Returns true
-target.isFirstPage;     // Returns true
-target.isLastPage;      // Returns false
-target.pages;           // Returns [1, 2, 3]
+target.pageItems();       // Returns [2, 3]
+target.pageCount();       // Returns 3
+target.itemCount();       // Returns 5
+target.firstItemOnPage(); // Returns 1
+target.lastItemOnPage();  // Returns 2
+target.hasPreviousPage(); // Returns false
+target.hasNextPage();     // Returns true
+target.isFirstPage();     // Returns true
+target.isLastPage();      // Returns false
+target.pages();           // Returns [1, 2, 3]
 ```
 
 ### Functions
@@ -142,11 +142,11 @@ The `simple` paged observable array will now use the simple page generator in it
 
 ```js
 // The returned pages are simply all available pages
-simple.pages; // Returns [1, 2, 3, 4, 5]
+simple.pages(); // Returns [1, 2, 3, 4, 5]
 
 // Changing the page number does not change the returned pages
 simple.pageNumber(3);
-simple.pages; // Returns [1, 2, 3, 4, 5]
+simple.pages(); // Returns [1, 2, 3, 4, 5]
 ```
 
 #### Sliding page generator
@@ -171,11 +171,11 @@ The `sliding` paged observable array will use the sliding page generator in its 
 
 ```js
 // Returned pages is a window around the current page
-sliding.pages; // Returns [1, 2, 3, 4, 5]
+sliding.pages(); // Returns [1, 2, 3, 4, 5]
 
 // Changing the page number changes the returned pages
 sliding.pageNumber(7);
-sliding.pages; // Returns [5, 6, 7, 8, 9]
+sliding.pages(); // Returns [5, 6, 7, 8, 9]
 ```
 
 As can be seen, the sliding page generator returns the current page number and some pages left and right of it. By default, the window size is equal to five, which means that two items to the left and two items to the right of the current page are also returned.
@@ -185,7 +185,7 @@ You can easily change the *sliding* generator's window size:
 ```js
 sliding.pageNumber(7);
 sliding.pageGenerator.windowSize(3);
-sliding.pages; // Returns [6, 7, 8]
+sliding.pages(); // Returns [6, 7, 8]
 ```
 
 Note: as the sliding page generator is the default option, the following two statements are equivalent:
@@ -233,7 +233,7 @@ The `custom` paged observable array will now use our custom page generator in it
 
 ```js
 // The returned pages are now zero-based
-custom.pages; // Returns [0, 1, 2, 3, 4]
+custom.pages(); // Returns [0, 1, 2, 3, 4]
 ```
 
 ## Installation

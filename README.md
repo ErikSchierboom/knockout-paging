@@ -119,34 +119,41 @@ target.toFirstPage();    // pageNumber becomes 1
 
 As we saw earlier, the `pages` computed observable returns an array of page numbers. It generates page through a concept known a page generators. Out of the box, there are two page generators you can use:
 
-- Simple page generator: returns all pages.
+- Default page generator: returns all pages.
 - Sliding page generator: returns current page and some pages surrounding.
 
-#### Simple page generator
+#### Default page generator
 
-The simple page generator simply returns all available pages. The following example shows how to use the *simple* page generator:
+The default page generator simply returns all available pages. The following example shows how to use the *default* page generator:
 
 ```js
 var input = [1,2,3,4,5,6,7,8,9];
 
-// Create a paged observable array using the 'simple' page generater
-var simple = ko.observableArray(input).extend({ 
+// Create a paged observable array using the 'default' page generater
+var default = ko.observableArray(input).extend({ 
   paged: { 
     pageSize: 2, 
-    pageGenerator: 'simple'
+    pageGenerator: 'default'
   } 
 });
 ```
 
-The `simple` paged observable array will now use the simple page generator in its `pages` observable:
+The `default` paged observable array will now use the default page generator in its `pages` observable:
 
 ```js
 // The returned pages are simply all available pages
-simple.pages(); // Returns [1, 2, 3, 4, 5]
+default.pages(); // Returns [1, 2, 3, 4, 5]
 
 // Changing the page number does not change the returned pages
-simple.pageNumber(3);
-simple.pages(); // Returns [1, 2, 3, 4, 5]
+default.pageNumber(3);
+default.pages(); // Returns [1, 2, 3, 4, 5]
+```
+
+Note: as the default page generator is the default option, the following two statements are equivalent:
+
+```js
+ko.observableArray(input).extend({ paged: { pageGenerator: 'default' } });
+ko.observableArray(input).extend({ paged: {} });
 ```
 
 #### Sliding page generator
@@ -186,13 +193,6 @@ You can easily change the *sliding* generator's window size:
 sliding.pageNumber(7);
 sliding.pageGenerator.windowSize(3);
 sliding.pages(); // Returns [6, 7, 8]
-```
-
-Note: as the sliding page generator is the default option, the following two statements are equivalent:
-
-```js
-ko.observableArray(input).extend({ paged: { pageGenerator: 'sliding' } });
-ko.observableArray(input).extend({ paged: {} });
 ```
 
 #### Custom page generators

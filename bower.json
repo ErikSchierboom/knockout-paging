@@ -6,7 +6,7 @@
   "authors": [
     "Erik Schierboom <erik_schierboom@hotmail.com>"
   ],
-  "description": "Adds binding handlers to Knockout (KO) that are initialized using paging content (HTML).",
+  "description": "Adds an extender to Knockout to add paging functionality to observable arrays.",
   "keywords": [
     "knockout",
     "foreach",

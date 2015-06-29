@@ -10,6 +10,7 @@
     "type": "git",
     "url": "git@github.com/ErikSchierboom/knockout-paging.git"
   },
+  "description": "Adds an extender to Knockout to add paging functionality to observable arrays.",
   "keywords": [
     "knockout",
     "foreach",

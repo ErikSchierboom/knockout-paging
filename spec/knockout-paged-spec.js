@@ -1,5 +1,5 @@
-mocha.setup('bdd')
-assert = chai.assert;
+mocha.setup('bdd');
+var expect = chai.expect;
 
 function createRange(min, max) {
   var list = [];
@@ -34,131 +34,131 @@ describe("paged extender", function () {
   context("on regular observable", function () {
     it("throws", function () {
       var regularObservable = ko.observable();
-      assert.throws(regularObservable.extend.bind(regularObservable, { paged: {} }));
+      expect(regularObservable.extend.bind(regularObservable, { paged: {} })).to.throw(Error);
     });
   });
     
   context("on empty paged observable array", function () {
     it("itemCount is 0", function () {
-      assert.strictEqual(emptyObservableArray.itemCount(), 0);
+      expect(emptyObservableArray.itemCount()).to.equal(0);
     });
     
     it("pageCount is 1", function () {
-      assert.strictEqual(emptyObservableArray.pageCount(), 1);
+      expect(emptyObservableArray.pageCount()).to.equal(1);
     });
     
     it("firstItemOnPage is 1", function () {
-      assert.strictEqual(emptyObservableArray.firstItemOnPage(), 1);
+      expect(emptyObservableArray.firstItemOnPage()).to.equal(1);
     });
     
     it("lastItemOnPage is 1", function () {
-      assert.strictEqual(emptyObservableArray.lastItemOnPage(), 1);
+      expect(emptyObservableArray.lastItemOnPage()).to.equal(1);
     });
     
     it("hasPreviousPage is false", function () {
-      assert.isFalse(emptyObservableArray.hasPreviousPage());
+      expect(emptyObservableArray.hasPreviousPage()).to.be.false;
     });
     
     it("hasNextPage is false", function () {
-      assert.isFalse(emptyObservableArray.hasNextPage());
+      expect(emptyObservableArray.hasNextPage()).to.be.false;
     });
     
     it("isFirstPage is true", function () {
-      assert.isTrue(emptyObservableArray.isFirstPage());
+      expect(emptyObservableArray.isFirstPage()).to.be.true;
     });
     
     it("isLastPage is true", function () {
-      assert.isTrue(emptyObservableArray.isLastPage());
+      expect(emptyObservableArray.isLastPage()).to.be.true;
     });
     
     it("pageItems returns empty array", function () {
-      assert.deepEqual(emptyObservableArray.pageItems(), []);
+      expect(emptyObservableArray.pageItems()).to.deep.equal([]);
     });
     
     it("toNextPage does not change pageNumber", function () {
       var oldPageNumber = emptyObservableArray.pageNumber();      
       emptyObservableArray.toNextPage();      
-      assert.strictEqual(emptyObservableArray.pageNumber(), oldPageNumber);
+      expect(emptyObservableArray.pageNumber()).to.equal(oldPageNumber);
     });
     
     it("toPreviousPage does not change pageNumber", function () {
       var oldPageNumber = emptyObservableArray.pageNumber();      
       emptyObservableArray.toPreviousPage();      
-      assert.strictEqual(emptyObservableArray.pageNumber(), oldPageNumber);
+      expect(emptyObservableArray.pageNumber()).to.equal(oldPageNumber);
     });
     
     it("toFirstPage does not change pageNumber", function () {
       var oldPageNumber = emptyObservableArray.pageNumber();      
       emptyObservableArray.toFirstPage();      
-      assert.strictEqual(emptyObservableArray.pageNumber(), oldPageNumber);
+      expect(emptyObservableArray.pageNumber()).to.equal(oldPageNumber);
     });
     
     it("toLastPage does not change pageNumber", function () {
       var oldPageNumber = emptyObservableArray.pageNumber();      
       emptyObservableArray.toLastPage();      
-      assert.strictEqual(emptyObservableArray.pageNumber(), oldPageNumber);
+      expect(emptyObservableArray.pageNumber()).to.equal(oldPageNumber);
     });
   });
     
   context("on single-page paged observable array", function () {    
     it("itemCount is number of elements in array", function () {
-      assert.strictEqual(singlePageObservableArray.itemCount(), singlePageObservableArray().length);
+      expect(singlePageObservableArray.itemCount()).to.equal(singlePageObservableArray().length);
     });
     
     it("pageCount is 1", function () {
-      assert.strictEqual(singlePageObservableArray.pageCount(), 1);
+      expect(singlePageObservableArray.pageCount()).to.equal(1);
     });
     
     it("firstItemOnPage is 1", function () {
-      assert.strictEqual(singlePageObservableArray.firstItemOnPage(), 1);
+      expect(singlePageObservableArray.firstItemOnPage()).to.equal(1);
     });
     
     it("lastItemOnPage is is number of elements in array", function () {
-      assert.strictEqual(singlePageObservableArray.lastItemOnPage(), singlePageObservableArray().length);
+      expect(singlePageObservableArray.lastItemOnPage()).to.equal(singlePageObservableArray().length);
     });
     
     it("hasPreviousPage is false", function () {
-      assert.isFalse(singlePageObservableArray.hasPreviousPage());
+      expect(singlePageObservableArray.hasPreviousPage()).to.be.false;
     });
     
     it("hasNextPage is false", function () {
-      assert.isFalse(singlePageObservableArray.hasNextPage());
+      expect(singlePageObservableArray.hasNextPage()).to.be.false;
     });
     
     it("isFirstPage is true", function () {
-      assert.isTrue(singlePageObservableArray.isFirstPage());
+      expect(singlePageObservableArray.isFirstPage()).to.be.true;
     });
     
     it("isLastPage is true", function () {
-      assert.isTrue(singlePageObservableArray.isLastPage());
+      expect(singlePageObservableArray.isLastPage()).to.be.true;
     });
       
     it("pageItems returns all array elements", function () {
-      assert.deepEqual(singlePageObservableArray.pageItems(), singlePageObservableArray());
+      expect(singlePageObservableArray.pageItems()).to.deep.equal(singlePageObservableArray());
     });
     
     it("toNextPage does not change pageNumber", function () {
       var oldPageNumber = singlePageObservableArray.pageNumber();      
       singlePageObservableArray.toNextPage();      
-      assert.strictEqual(singlePageObservableArray.pageNumber(), oldPageNumber);
+      expect(singlePageObservableArray.pageNumber()).to.equal(oldPageNumber);
     });
     
     it("toPreviousPage does not change pageNumber", function () {
       var oldPageNumber = singlePageObservableArray.pageNumber();      
       singlePageObservableArray.toPreviousPage();      
-      assert.strictEqual(singlePageObservableArray.pageNumber(), oldPageNumber);
+      expect(singlePageObservableArray.pageNumber()).to.equal(oldPageNumber);
     });
     
     it("toFirstPage does not change pageNumber", function () {
       var oldPageNumber = singlePageObservableArray.pageNumber();      
       singlePageObservableArray.toFirstPage();      
-      assert.strictEqual(singlePageObservableArray.pageNumber(), oldPageNumber);
+      expect(singlePageObservableArray.pageNumber()).to.equal(oldPageNumber);
     });
     
     it("toLastPage does not change pageNumber", function () {
       var oldPageNumber = singlePageObservableArray.pageNumber();      
       singlePageObservableArray.toLastPage();      
-      assert.strictEqual(singlePageObservableArray.pageNumber(), oldPageNumber);
+      expect(singlePageObservableArray.pageNumber()).to.equal(oldPageNumber);
     });
   });
     
@@ -169,62 +169,62 @@ describe("paged extender", function () {
       });
     
       it("itemCount is number of elements in array", function () {
-        assert.strictEqual(smallNumberPagesObservableArray.itemCount(), smallNumberPagesObservableArray().length);
+        expect(smallNumberPagesObservableArray.itemCount()).to.equal(smallNumberPagesObservableArray().length);
       });
       
       it("pageCount is correct", function () {
-        assert.strictEqual(smallNumberPagesObservableArray.pageCount(), 3);
+        expect(smallNumberPagesObservableArray.pageCount()).to.equal(3);
       });
       
       it("firstItemOnPage is correct", function () {
-        assert.strictEqual(smallNumberPagesObservableArray.firstItemOnPage(), 1);
+        expect(smallNumberPagesObservableArray.firstItemOnPage()).to.equal(1);
       });
       
       it("lastItemOnPage is correct", function () {
-        assert.strictEqual(smallNumberPagesObservableArray.lastItemOnPage(), 3);
+        expect(smallNumberPagesObservableArray.lastItemOnPage()).to.equal(3);
       });
       
       it("hasPreviousPage is false", function () {
-        assert.isFalse(smallNumberPagesObservableArray.hasPreviousPage());
+        expect(smallNumberPagesObservableArray.hasPreviousPage()).to.be.false;
       });
       
       it("hasNextPage is true", function () {
-        assert.isTrue(smallNumberPagesObservableArray.hasNextPage());
+        expect(smallNumberPagesObservableArray.hasNextPage()).to.be.true;
       });
       
       it("isFirstPage is true", function () {
-        assert.isTrue(smallNumberPagesObservableArray.isFirstPage());
+        expect(smallNumberPagesObservableArray.isFirstPage()).to.be.true;
       });
       
       it("isLastPage is false", function () {
-        assert.isFalse(smallNumberPagesObservableArray.isLastPage());
+        expect(smallNumberPagesObservableArray.isLastPage()).to.be.false;
       });
       
       it("pageItems returns all array elements on page", function () {
-        assert.deepEqual(smallNumberPagesObservableArray.pageItems(), [1, 2, 3]);
+        expect(smallNumberPagesObservableArray.pageItems()).to.deep.equal([1, 2, 3]);
       });
       
       it("toNextPage increments pageNumber", function () {
         var oldPageNumber = smallNumberPagesObservableArray.pageNumber();      
         smallNumberPagesObservableArray.toNextPage();      
-        assert.strictEqual(smallNumberPagesObservableArray.pageNumber(), oldPageNumber + 1);
+        expect(smallNumberPagesObservableArray.pageNumber()).to.equal(oldPageNumber + 1);
       });
       
       it("toPreviousPage does not change pageNumber", function () {
         var oldPageNumber = smallNumberPagesObservableArray.pageNumber();      
         smallNumberPagesObservableArray.toPreviousPage();      
-        assert.strictEqual(smallNumberPagesObservableArray.pageNumber(), oldPageNumber);
+        expect(smallNumberPagesObservableArray.pageNumber()).to.equal(oldPageNumber);
       });
       
       it("toFirstPage does not change pageNumber", function () {
         var oldPageNumber = smallNumberPagesObservableArray.pageNumber();      
         smallNumberPagesObservableArray.toFirstPage();      
-        assert.strictEqual(smallNumberPagesObservableArray.pageNumber(), oldPageNumber);
+        expect(smallNumberPagesObservableArray.pageNumber()).to.equal(oldPageNumber);
       });
       
       it("toLastPage sets pageNumber to last page", function () {
         smallNumberPagesObservableArray.toLastPage();      
-        assert.strictEqual(smallNumberPagesObservableArray.pageNumber(), smallNumberPagesObservableArray.pageCount());
+        expect(smallNumberPagesObservableArray.pageNumber()).to.equal(smallNumberPagesObservableArray.pageCount());
       });    
     });
     
@@ -234,61 +234,61 @@ describe("paged extender", function () {
       });
     
       it("itemCount is number of elements in array", function () {
-        assert.strictEqual(smallNumberPagesObservableArray.itemCount(), smallNumberPagesObservableArray().length);
+        expect(smallNumberPagesObservableArray.itemCount()).to.equal(smallNumberPagesObservableArray().length);
       });
       
       it("pageCount is correct", function () {
-        assert.strictEqual(smallNumberPagesObservableArray.pageCount(), 3);
+        expect(smallNumberPagesObservableArray.pageCount()).to.equal(3);
       });
       
       it("firstItemOnPage is correct", function () {
-        assert.strictEqual(smallNumberPagesObservableArray.firstItemOnPage(), 4);
+        expect(smallNumberPagesObservableArray.firstItemOnPage()).to.equal(4);
       });
       
       it("lastItemOnPage is correct", function () {
-        assert.strictEqual(smallNumberPagesObservableArray.lastItemOnPage(), 6);
+        expect(smallNumberPagesObservableArray.lastItemOnPage()).to.equal(6);
       });
       
       it("hasPreviousPage is true", function () {
-        assert.isTrue(smallNumberPagesObservableArray.hasPreviousPage());
+        expect(smallNumberPagesObservableArray.hasPreviousPage()).to.be.true;
       });
       
       it("hasNextPage is true", function () {
-        assert.isTrue(smallNumberPagesObservableArray.hasNextPage());
+        expect(smallNumberPagesObservableArray.hasNextPage()).to.be.true;
       });
       
       it("isFirstPage is false", function () {
-        assert.isFalse(smallNumberPagesObservableArray.isFirstPage());
+        expect(smallNumberPagesObservableArray.isFirstPage()).to.be.false;
       });
       
       it("isLastPage is false", function () {
-        assert.isFalse(smallNumberPagesObservableArray.isLastPage());
+        expect(smallNumberPagesObservableArray.isLastPage()).to.be.false;
       });
       
       it("pageItems returns all array elements on page", function () {
-        assert.deepEqual(smallNumberPagesObservableArray.pageItems(), [4, 5, 6]);
+        expect(smallNumberPagesObservableArray.pageItems()).to.deep.equal([4, 5, 6]);
       });
       
       it("toNextPage increments pageNumber", function () {
         var oldPageNumber = smallNumberPagesObservableArray.pageNumber();      
         smallNumberPagesObservableArray.toNextPage();      
-        assert.strictEqual(smallNumberPagesObservableArray.pageNumber(), oldPageNumber + 1);
+        expect(smallNumberPagesObservableArray.pageNumber()).to.equal(oldPageNumber + 1);
       });
       
       it("toPreviousPage decrements pageNumber", function () {
         var oldPageNumber = smallNumberPagesObservableArray.pageNumber();      
         smallNumberPagesObservableArray.toPreviousPage();      
-        assert.strictEqual(smallNumberPagesObservableArray.pageNumber(), oldPageNumber - 1);
+        expect(smallNumberPagesObservableArray.pageNumber()).to.equal(oldPageNumber - 1);
       });
       
       it("toFirstPage sets pageNumber to first page", function () {
         smallNumberPagesObservableArray.toFirstPage();      
-        assert.strictEqual(smallNumberPagesObservableArray.pageNumber(), 1);
+        expect(smallNumberPagesObservableArray.pageNumber()).to.equal(1);
       });
       
       it("toLastPage sets pageNumber to last page", function () {
         smallNumberPagesObservableArray.toLastPage();      
-        assert.strictEqual(smallNumberPagesObservableArray.pageNumber(), smallNumberPagesObservableArray.pageCount());
+        expect(smallNumberPagesObservableArray.pageNumber()).to.equal(smallNumberPagesObservableArray.pageCount());
       });    
     });
     
@@ -298,62 +298,62 @@ describe("paged extender", function () {
       });
     
       it("itemCount is number of elements in array", function () {
-        assert.strictEqual(smallNumberPagesObservableArray.itemCount(), smallNumberPagesObservableArray().length);
+        expect(smallNumberPagesObservableArray.itemCount()).to.equal(smallNumberPagesObservableArray().length);
       });
       
       it("pageCount is correct", function () {
-        assert.strictEqual(smallNumberPagesObservableArray.pageCount(), 3);
+        expect(smallNumberPagesObservableArray.pageCount()).to.equal(3);
       });
       
       it("firstItemOnPage is correct", function () {
-        assert.strictEqual(smallNumberPagesObservableArray.firstItemOnPage(), 7);
+        expect(smallNumberPagesObservableArray.firstItemOnPage()).to.equal(7);
       });
       
       it("lastItemOnPage is correct", function () {
-        assert.strictEqual(smallNumberPagesObservableArray.lastItemOnPage(), 7);
+        expect(smallNumberPagesObservableArray.lastItemOnPage()).to.equal(7);
       });
       
       it("hasPreviousPage is true", function () {
-        assert.isTrue(smallNumberPagesObservableArray.hasPreviousPage());
+        expect(smallNumberPagesObservableArray.hasPreviousPage()).to.be.true;
       });
       
       it("hasNextPage is false", function () {
-        assert.isFalse(smallNumberPagesObservableArray.hasNextPage());
+        expect(smallNumberPagesObservableArray.hasNextPage()).to.be.false;
       });
       
       it("isFirstPage is false", function () {
-        assert.isFalse(smallNumberPagesObservableArray.isFirstPage());
+        expect(smallNumberPagesObservableArray.isFirstPage()).to.be.false;
       });
       
       it("isLastPage is true", function () {
-        assert.isTrue(smallNumberPagesObservableArray.isLastPage());
+        expect(smallNumberPagesObservableArray.isLastPage()).to.be.true;
       });
       
       it("pageItems returns all array elements on page", function () {
-        assert.deepEqual(smallNumberPagesObservableArray.pageItems(), [7]);
+        expect(smallNumberPagesObservableArray.pageItems()).to.deep.equal([7]);
       });
       
       it("toNextPage does not change pageNumber", function () {
         var oldPageNumber = smallNumberPagesObservableArray.pageNumber();      
         smallNumberPagesObservableArray.toNextPage();      
-        assert.strictEqual(smallNumberPagesObservableArray.pageNumber(), oldPageNumber);
+        expect(smallNumberPagesObservableArray.pageNumber()).to.equal(oldPageNumber);
       });
       
       it("toPreviousPage decrements pageNumber", function () {
         var oldPageNumber = smallNumberPagesObservableArray.pageNumber();      
         smallNumberPagesObservableArray.toPreviousPage();      
-        assert.strictEqual(smallNumberPagesObservableArray.pageNumber(), oldPageNumber - 1);
+        expect(smallNumberPagesObservableArray.pageNumber()).to.equal(oldPageNumber - 1);
       });
       
       it("toFirstPage sets pageNumber to first page", function () {
         smallNumberPagesObservableArray.toFirstPage();      
-        assert.strictEqual(smallNumberPagesObservableArray.pageNumber(), 1);
+        expect(smallNumberPagesObservableArray.pageNumber()).to.equal(1);
       });
       
       it("toLastPage does not change pageNumber", function () {
         var oldPageNumber = smallNumberPagesObservableArray.pageNumber();      
         smallNumberPagesObservableArray.toLastPage();      
-        assert.strictEqual(smallNumberPagesObservableArray.pageNumber(), oldPageNumber);
+        expect(smallNumberPagesObservableArray.pageNumber()).to.equal(oldPageNumber);
       });    
     });
   });
@@ -369,15 +369,15 @@ describe("paged extender", function () {
       });
       
       it("pageNumber is 1", function () {
-        assert.strictEqual(pagedArrayWithoutOptions.pageNumber(), 1);
+        expect(pagedArrayWithoutOptions.pageNumber()).to.equal(1);
       });
   
       it("pageSize is 50", function () {
-        assert.strictEqual(pagedArrayWithoutOptions.pageSize(), 50);
+        expect(pagedArrayWithoutOptions.pageSize()).to.equal(50);
       });
   
       it("pageGenerator is default", function () {
-        assert.strictEqual(pagedArrayWithoutOptions.pageGenerator, ko.paging.generators['default']);
+        expect(pagedArrayWithoutOptions.pageGenerator).to.equal(ko.paging.generators['default']);
       });
       
       it("pageNumber uses global default", function () {
@@ -385,7 +385,7 @@ describe("paged extender", function () {
         pagedArrayWithoutOptions = ko.observableArray();
         pagedArrayWithoutOptions.extend({ paged: emptyOptions });
 
-        assert.strictEqual(pagedArrayWithoutOptions.pageNumber(), 2);
+        expect(pagedArrayWithoutOptions.pageNumber()).to.equal(2);
       });
   
       it("pageSize uses global default", function () {
@@ -393,7 +393,7 @@ describe("paged extender", function () {
         pagedArrayWithoutOptions = ko.observableArray();
         pagedArrayWithoutOptions.extend({ paged: emptyOptions });
 
-        assert.strictEqual(pagedArrayWithoutOptions.pageSize(), 25);
+        expect(pagedArrayWithoutOptions.pageSize()).to.equal(25);
       });
     });
   
@@ -407,18 +407,18 @@ describe("paged extender", function () {
       });
       
       it("pageNumber is equal to supplied option value", function () {
-        assert.strictEqual(pagedArrayWithOptions.pageNumber(), options.pageNumber);
+        expect(pagedArrayWithOptions.pageNumber()).to.equal(options.pageNumber);
       });
   
       it("pageSize is equal to supplied option value", function () {
-        assert.strictEqual(pagedArrayWithOptions.pageSize(), options.pageSize);
+        expect(pagedArrayWithOptions.pageSize()).to.equal(options.pageSize);
       });
 
       var pageGeneratorNames = ['default'];
       
       pageGeneratorNames.forEach(function(pageGeneratorName) {
         it("pageGenerator is equal to page generator with supplied option value", function () {
-          assert.strictEqual(pagedArrayWithOptions.pageGenerator, ko.paging.generators[pageGeneratorName]);
+          expect(pagedArrayWithOptions.pageGenerator).to.equal(ko.paging.generators[pageGeneratorName]);
         });
       });
   
@@ -428,7 +428,7 @@ describe("paged extender", function () {
         options = { pageGenerator: 'custom' };
         pagedArrayWithOptions.extend({ paged: options });
 
-        assert.strictEqual(pagedArrayWithOptions.pageGenerator, customPageGenerator);
+        expect(pagedArrayWithOptions.pageGenerator).to.equal(customPageGenerator);
       });
       
       var numbersLessThenZero = [0, -1, -3];
@@ -436,12 +436,12 @@ describe("paged extender", function () {
       numbersLessThenZero.forEach(function(invalidNumber) {
         it("pageNumber less than 1 throws", function () {
           options = { pageNumber: invalidNumber };
-          assert.throws(pagedArrayWithOptions.extend.bind(pagedArrayWithOptions, { paged: options }));
+          expect(pagedArrayWithOptions.extend.bind(pagedArrayWithOptions, { paged: options })).to.throw(Error);
         });
         
         it("pageSize less than 1 throws", function () {
           options = { pageSize: invalidNumber };
-          assert.throws(pagedArrayWithOptions.extend.bind(pagedArrayWithOptions, { paged: options }));
+          expect(pagedArrayWithOptions.extend.bind(pagedArrayWithOptions, { paged: options })).to.throw(Error);
         });
       });
       
@@ -450,7 +450,7 @@ describe("paged extender", function () {
       unknownPageGeneratorNames.forEach(function(unknownPageGeneratorName) {
         it("pageGenerator with unknown name throws", function () {
           options = { pageGenerator: unknownPageGeneratorName };
-          assert.throws(pagedArrayWithOptions.extend.bind(pagedArrayWithOptions, { paged: options }));
+          expect(pagedArrayWithOptions.extend.bind(pagedArrayWithOptions, { paged: options })).to.throw(Error);
         });
       });
     });
@@ -458,12 +458,12 @@ describe("paged extender", function () {
     context("with initial value is", function() {
       it("empty array works", function () {
         var pagedArray = ko.observableArray([]).extend({ paged: {} });
-        assert.deepEqual(pagedArray(), []);
+        expect(pagedArray()).to.deep.equal([]);
       });
   
       it("non-empty array works", function () {
         var pagedArray = ko.observableArray([1, 2, 3]).extend({ paged: {} });
-        assert.deepEqual(pagedArray(), [1, 2, 3]);
+        expect(pagedArray()).to.deep.equal([1, 2, 3]);
       });
     });
   });
@@ -471,12 +471,12 @@ describe("paged extender", function () {
   context("observable value", function () {
     it("pageNumber can be explicitly set", function () {
       singlePageObservableArray.pageNumber(2);
-      assert.strictEqual(singlePageObservableArray.pageNumber(), 2);
+      expect(singlePageObservableArray.pageNumber()).to.equal(2);
     });
 
     it("pageSize can be explicitly set", function () {
       singlePageObservableArray.pageSize(10);
-      assert.strictEqual(singlePageObservableArray.pageSize(), 10);
+      expect(singlePageObservableArray.pageSize()).to.equal(10);
     });
   });
   
@@ -489,15 +489,15 @@ describe("paged extender", function () {
       });
 
       it("works for single page", function () {
-        assert.deepEqual(singlePageObservableArray.pages(), createRange(1, 1));
+        expect(singlePageObservableArray.pages()).to.deep.equal(createRange(1, 1));
       });
 
       it("works for small numbers of pages", function () {
-        assert.deepEqual(smallNumberPagesObservableArray.pages(), createRange(1, 3));
+        expect(smallNumberPagesObservableArray.pages()).to.deep.equal(createRange(1, 3));
       });
 
       it("works for large number of pages", function () {
-        assert.deepEqual(largeNumberPagesObservableArray.pages(), createRange(1, 10));
+        expect(largeNumberPagesObservableArray.pages()).to.deep.equal(createRange(1, 10));
       });
 
       context("responds to change of", function () {
@@ -506,8 +506,8 @@ describe("paged extender", function () {
           smallNumberPagesObservableArray.pageSize(2);
           var newPages = smallNumberPagesObservableArray.pages();
 
-          assert.deepEqual(oldPages, createRange(1, 3));
-          assert.deepEqual(newPages, createRange(1, 4));
+          expect(oldPages).to.deep.equal(createRange(1, 3));
+          expect(newPages).to.deep.equal(createRange(1, 4));
         });
 
         it("number of items in array", function () {
@@ -515,8 +515,8 @@ describe("paged extender", function () {
           smallNumberPagesObservableArray(createRange(1, 4))
           var newPages = smallNumberPagesObservableArray.pages();
 
-          assert.deepEqual(oldPages, createRange(1, 3));
-          assert.deepEqual(newPages, createRange(1, 2));
+          expect(oldPages).to.deep.equal(createRange(1, 3));
+          expect(newPages).to.deep.equal(createRange(1, 2));
         });
       });
     });
@@ -531,42 +531,42 @@ describe("paged extender", function () {
       });
 
       it("works for single page", function () {
-        assert.deepEqual(singlePageObservableArray.pages(), createRange(1, 1));
+        expect(singlePageObservableArray.pages()).to.deep.equal(createRange(1, 1));
       });
 
       it("works for small numbers of pages", function () {
-        assert.deepEqual(smallNumberPagesObservableArray.pages(), createRange(1, 3));
+        expect(smallNumberPagesObservableArray.pages()).to.deep.equal(createRange(1, 3));
       });
 
       it("works for large number of pages", function () {
-        assert.deepEqual(largeNumberPagesObservableArray.pages(), createRange(1, 5));
+        expect(largeNumberPagesObservableArray.pages()).to.deep.equal(createRange(1, 5));
       });
 
       it("works when page is first page", function () {
         largeNumberPagesObservableArray.pageNumber(1);
-        assert.deepEqual(largeNumberPagesObservableArray.pages(), createRange(1, 5));
+        expect(largeNumberPagesObservableArray.pages()).to.deep.equal(createRange(1, 5));
       });
 
       it("works when page is middle page", function () {
         largeNumberPagesObservableArray.pageNumber(5);
-        assert.deepEqual(largeNumberPagesObservableArray.pages(), createRange(3, 7));
+        expect(largeNumberPagesObservableArray.pages()).to.deep.equal(createRange(3, 7));
       });
 
       it("works when page is last page", function () {
         largeNumberPagesObservableArray.pageNumber(10);
-        assert.deepEqual(largeNumberPagesObservableArray.pages(), createRange(6, 10));
+        expect(largeNumberPagesObservableArray.pages()).to.deep.equal(createRange(6, 10));
       });
 
       it("works when window size is even", function () {
         largeNumberPagesObservableArray.pageGenerator.windowSize(2);
         largeNumberPagesObservableArray.pageNumber(6);
-        assert.deepEqual(largeNumberPagesObservableArray.pages(), [5, 6]);
+        expect(largeNumberPagesObservableArray.pages()).to.deep.equal([5, 6]);
       });
 
       it("works when window size is odd", function () {
         largeNumberPagesObservableArray.pageGenerator.windowSize(3);
         largeNumberPagesObservableArray.pageNumber(6);
-        assert.deepEqual(largeNumberPagesObservableArray.pages(), [5, 6, 7]);
+        expect(largeNumberPagesObservableArray.pages()).to.deep.equal([5, 6, 7]);
       });
 
       context("responds to change of", function () {
@@ -575,8 +575,8 @@ describe("paged extender", function () {
           smallNumberPagesObservableArray.pageSize(2);
           var newPages = smallNumberPagesObservableArray.pages();
 
-          assert.deepEqual(oldPages, createRange(1, 3));
-          assert.deepEqual(newPages, createRange(1, 4));
+          expect(oldPages).to.deep.equal(createRange(1, 3));
+          expect(newPages).to.deep.equal(createRange(1, 4));
         });
 
         it("number of items in array", function () {
@@ -584,8 +584,8 @@ describe("paged extender", function () {
           smallNumberPagesObservableArray(createRange(1, 4))
           var newPages = smallNumberPagesObservableArray.pages();
 
-          assert.deepEqual(oldPages, createRange(1, 3));
-          assert.deepEqual(newPages, createRange(1, 2));
+          expect(oldPages).to.deep.equal(createRange(1, 3));
+          expect(newPages).to.deep.equal(createRange(1, 2));
         });
 
         it("window size", function () {
@@ -593,8 +593,8 @@ describe("paged extender", function () {
           smallNumberPagesObservableArray.pageGenerator.windowSize(2);
           var newPages = smallNumberPagesObservableArray.pages();
 
-          assert.deepEqual(oldPages, createRange(1, 3));
-          assert.deepEqual(newPages, createRange(1, 2));
+          expect(oldPages).to.deep.equal(createRange(1, 3));
+          expect(newPages).to.deep.equal(createRange(1, 2));
         });
       });
     });
@@ -615,15 +615,15 @@ describe("paged extender", function () {
       });
 
       it("works for single page", function () {
-        assert.deepEqual(singlePageObservableArray.pages(), [0]);
+        expect(singlePageObservableArray.pages()).to.deep.equal([0]);
       });
 
       it("works for small numbers of pages", function () {
-        assert.deepEqual(smallNumberPagesObservableArray.pages(), createRange(0, 2));
+        expect(smallNumberPagesObservableArray.pages()).to.deep.equal(createRange(0, 2));
       });
 
       it("works for large number of pages", function () {
-        assert.deepEqual(largeNumberPagesObservableArray.pages(), createRange(0, 9));
+        expect(largeNumberPagesObservableArray.pages()).to.deep.equal(createRange(0, 9));
       });
 
       context("responds to change of", function () {
@@ -632,8 +632,8 @@ describe("paged extender", function () {
           smallNumberPagesObservableArray.pageSize(2);
           var newPages = smallNumberPagesObservableArray.pages();
 
-          assert.deepEqual(oldPages, createRange(0, 2));
-          assert.deepEqual(newPages, createRange(0, 3));
+          expect(oldPages).to.deep.equal(createRange(0, 2));
+          expect(newPages).to.deep.equal(createRange(0, 3));
         });
 
         it("number of items in array", function () {
@@ -641,8 +641,8 @@ describe("paged extender", function () {
           smallNumberPagesObservableArray(createRange(1, 4))
           var newPages = smallNumberPagesObservableArray.pages();
 
-          assert.deepEqual(oldPages, createRange(0, 2));
-          assert.deepEqual(newPages, createRange(0, 1));
+          expect(oldPages).to.deep.equal(createRange(0, 2));
+          expect(newPages).to.deep.equal(createRange(0, 1));
         });
       });
     });
@@ -651,27 +651,27 @@ describe("paged extender", function () {
   context("created using ko.pagedObservableArray", function () {
     it("works without parameters", function () {
       var pagedObservableArray = ko.pagedObservableArray();
-      assert.deepEqual(pagedObservableArray(), []);
-      assert.deepEqual(pagedObservableArray.pageNumber(), 1);
+      expect(pagedObservableArray()).to.deep.equal([]);
+      expect(pagedObservableArray.pageNumber()).to.deep.equal(1);
     });
 
     it("works with empty array parameter", function () {
       var pagedObservableArray = ko.pagedObservableArray([]);
-      assert.deepEqual(pagedObservableArray(), []);
-      assert.deepEqual(pagedObservableArray.pageNumber(), 1);
+      expect(pagedObservableArray()).to.deep.equal([]);
+      expect(pagedObservableArray.pageNumber()).to.deep.equal(1);
     });
 
     it("works with non-empty array parameter", function () {
       var pagedObservableArray = ko.pagedObservableArray([1, 2, 3]);
-      assert.deepEqual(pagedObservableArray(), [1, 2, 3]);
-      assert.deepEqual(pagedObservableArray.pageNumber(), 1);
+      expect(pagedObservableArray()).to.deep.equal([1, 2, 3]);
+      expect(pagedObservableArray.pageNumber()).to.deep.equal(1);
     });
 
     it("works with array and options parameters", function () {
       var options = { pageSize: 2 };
       var pagedObservableArray = ko.pagedObservableArray([1, 2, 3], options);
-      assert.deepEqual(pagedObservableArray(), [1, 2, 3]);
-      assert.deepEqual(pagedObservableArray.pageSize(), 2);
+      expect(pagedObservableArray()).to.deep.equal([1, 2, 3]);
+      expect(pagedObservableArray.pageSize()).to.deep.equal(2);
     });
   });
 });

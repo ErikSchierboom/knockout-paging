@@ -3,6 +3,12 @@
   "version": "0.2.1",
   "description": "Adds an extender to Knockout to add paging functionality to observable arrays.",
   "main": "dist/knockout-paging.js",
+  "files": [
+    "LICENSE",
+    "README.md",
+    "index.js",
+    "dist"
+  ],
   "scripts": {
     "test": "gulp test"
   },

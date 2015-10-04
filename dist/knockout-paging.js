@@ -1,5 +1,5 @@
 /*!
-  Knockout paged extender 0.2.2
+  Knockout paged extender 0.2.3
   By: Erik Schierboom (C) 2015
   License: Apache 2
 

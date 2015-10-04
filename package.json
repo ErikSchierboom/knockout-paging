@@ -1,6 +1,6 @@
 {
   "name": "knockout-paging",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Adds an extender to Knockout to add paging functionality to observable arrays.",
   "main": "dist/knockout-paging.js",
   "files": [
@@ -29,6 +29,8 @@
     "url": "https://github.com/ErikSchierboom/knockout-paging/issues"
   },
   "homepage": "https://github.com/ErikSchierboom/knockout-paging",
+  "registry": "npm",
+  "format": "global",
   "devDependencies": {
     "chai": "*",
     "gulp": "*",

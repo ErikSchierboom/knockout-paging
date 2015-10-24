@@ -26,10 +26,6 @@
     return ko.isObservable(value) && 'push' in value;
   }
 
-  function isArray(value) {
-    return value.constructor === Array;
-  }
-
   function createRange(min, max) {
     var list = [];
 

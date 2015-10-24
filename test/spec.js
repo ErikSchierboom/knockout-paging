@@ -1,5 +1,7 @@
-mocha.setup('bdd');
-var expect = chai.expect;
+var expect = require('chai').expect;
+var ko = require('knockout');
+
+require('../index.js');
 
 function createRange(min, max) {
   var list = [];

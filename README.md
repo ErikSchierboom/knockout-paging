@@ -4,6 +4,7 @@
 [![npm version](https://badge.fury.io/js/knockout-paging.svg)](http://badge.fury.io/js/knockout-paging)
 [![Build Status](https://travis-ci.org/ErikSchierboom/knockout-paging.svg?branch=master)](https://travis-ci.org/ErikSchierboom/knockout-paging)
 [![Build status](https://ci.appveyor.com/api/projects/status/9odakh2g33mtpbm5?svg=true)](https://ci.appveyor.com/project/ErikSchierboom/knockout-paging)
+[![Coverage Status](https://coveralls.io/repos/ErikSchierboom/knockout-paging/badge.svg?branch=master&service=github)](https://coveralls.io/github/ErikSchierboom/knockout-paging?branch=master)
 
 This library adds an extender to Knockout that can add paging functionality to observable arrays.
 

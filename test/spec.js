@@ -1,7 +1,7 @@
 var expect = require('chai').expect;
 var ko = require('knockout');
 
-require('../index.js');
+require('../knockout-paging.js');
 
 function createRange(min, max) {
   var list = [];

@@ -4,7 +4,6 @@ var sinonChai = require("sinon-chai");
 var ko = require('knockout');
 
 var expect = chai.expect;
-var clock = sinon.useFakeTimers();
 
 chai.use(sinonChai);
 
@@ -253,7 +252,7 @@ describe("paged extender", function () {
       });
     });
 
-    context.only("when pageNumber change", function () {
+    context("when pageNumber change", function () {
       context("and is smallNumberPages", function () {
         beforeEach(function () {
           smallNumberPagesObservableArray.pageItems.subscribe(spy);
@@ -261,10 +260,13 @@ describe("paged extender", function () {
 
         it("pageItems should notify subscribers only once", function (done) {
           smallNumberPagesObservableArray.toLastPage();
-          expect(spy).to.have.been.calledOnce;
+          setTimeout(function () {
+            done();
+            expect(spy).to.have.been.calledOnce;
+          }, 1);
         });
       });
-      
+
       context("and is largeNumberPages", function () {
         beforeEach(function () {
           largeNumberPagesObservableArray.pageItems.subscribe(spy);
@@ -272,7 +274,10 @@ describe("paged extender", function () {
 
         it("pageItems should notify subscribers only once", function (done) {
           largeNumberPagesObservableArray.toLastPage();
-          expect(spy).to.have.been.calledOnce;
+          setTimeout(function () {
+            done();
+            expect(spy).to.have.been.calledOnce;
+          }, 1);
         });
       });
     });

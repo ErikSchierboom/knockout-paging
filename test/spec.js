@@ -1,5 +1,11 @@
-var expect = require('chai').expect;
+var chai = require('chai');
+var sinon = require('sinon');
+var sinonChai = require("sinon-chai");
 var ko = require('knockout');
+
+var expect = chai.expect;
+
+chai.use(sinonChai);
 
 require('../knockout-paging.js');
 
@@ -7,19 +13,23 @@ function createRange(min, max) {
   var list = [];
 
   for (var i = min; i <= max; i++) {
-      list.push(i);
+    list.push(i);
   }
 
   return list;
 }
 
 describe("paged extender", function () {
-  var emptyObservableArray,
-      singlePageObservableArray,
-      smallNumberPagesObservableArray,
-      largeNumberPagesObservableArray;
+  var spy,
+    emptyObservableArray,
+    singlePageObservableArray,
+    smallNumberPagesObservableArray,
+    largeNumberPagesObservableArray;
+  spy = sinon.spy();
 
-  beforeEach(function() {
+  beforeEach(function () {
+    spy.reset();
+
     var options = { pageSize: 3 };
 
     // Reset the defaults
@@ -32,356 +42,398 @@ describe("paged extender", function () {
     smallNumberPagesObservableArray = ko.observableArray(createRange(1, 7)).extend({ paged: options });
     largeNumberPagesObservableArray = ko.observableArray(createRange(1, 30)).extend({ paged: options });
   });
-  
+
   context("on regular observable", function () {
     it("throws", function () {
       var regularObservable = ko.observable();
       expect(regularObservable.extend.bind(regularObservable, { paged: {} })).to.throw(Error);
     });
   });
-    
+
   context("on empty paged observable array", function () {
     it("itemCount is 0", function () {
       expect(emptyObservableArray.itemCount()).to.equal(0);
     });
-    
+
     it("pageCount is 1", function () {
       expect(emptyObservableArray.pageCount()).to.equal(1);
     });
-    
+
     it("firstItemOnPage is 1", function () {
       expect(emptyObservableArray.firstItemOnPage()).to.equal(1);
     });
-    
+
     it("lastItemOnPage is 1", function () {
       expect(emptyObservableArray.lastItemOnPage()).to.equal(1);
     });
-    
+
     it("hasPreviousPage is false", function () {
       expect(emptyObservableArray.hasPreviousPage()).to.be.false;
     });
-    
+
     it("hasNextPage is false", function () {
       expect(emptyObservableArray.hasNextPage()).to.be.false;
     });
-    
+
     it("isFirstPage is true", function () {
       expect(emptyObservableArray.isFirstPage()).to.be.true;
     });
-    
+
     it("isLastPage is true", function () {
       expect(emptyObservableArray.isLastPage()).to.be.true;
     });
-    
+
     it("pageItems returns empty array", function () {
       expect(emptyObservableArray.pageItems()).to.deep.equal([]);
     });
-    
+
     it("toNextPage does not change pageNumber", function () {
-      var oldPageNumber = emptyObservableArray.pageNumber();      
-      emptyObservableArray.toNextPage();      
+      var oldPageNumber = emptyObservableArray.pageNumber();
+      emptyObservableArray.toNextPage();
       expect(emptyObservableArray.pageNumber()).to.equal(oldPageNumber);
     });
-    
+
     it("toPreviousPage does not change pageNumber", function () {
-      var oldPageNumber = emptyObservableArray.pageNumber();      
-      emptyObservableArray.toPreviousPage();      
+      var oldPageNumber = emptyObservableArray.pageNumber();
+      emptyObservableArray.toPreviousPage();
       expect(emptyObservableArray.pageNumber()).to.equal(oldPageNumber);
     });
-    
+
     it("toFirstPage does not change pageNumber", function () {
-      var oldPageNumber = emptyObservableArray.pageNumber();      
-      emptyObservableArray.toFirstPage();      
+      var oldPageNumber = emptyObservableArray.pageNumber();
+      emptyObservableArray.toFirstPage();
       expect(emptyObservableArray.pageNumber()).to.equal(oldPageNumber);
     });
-    
+
     it("toLastPage does not change pageNumber", function () {
-      var oldPageNumber = emptyObservableArray.pageNumber();      
-      emptyObservableArray.toLastPage();      
+      var oldPageNumber = emptyObservableArray.pageNumber();
+      emptyObservableArray.toLastPage();
       expect(emptyObservableArray.pageNumber()).to.equal(oldPageNumber);
+    });
+
+    it("pageItems should not notify subscribers", function () {
+      emptyObservableArray.pageItems.subscribe(spy);
+      emptyObservableArray.toFirstPage();
+      expect(spy).not.to.have.been.called;
     });
   });
-    
-  context("on single-page paged observable array", function () {    
+
+  context("on single-page paged observable array", function () {
     it("itemCount is number of elements in array", function () {
       expect(singlePageObservableArray.itemCount()).to.equal(singlePageObservableArray().length);
     });
-    
+
     it("pageCount is 1", function () {
       expect(singlePageObservableArray.pageCount()).to.equal(1);
     });
-    
+
     it("firstItemOnPage is 1", function () {
       expect(singlePageObservableArray.firstItemOnPage()).to.equal(1);
     });
-    
+
     it("lastItemOnPage is is number of elements in array", function () {
       expect(singlePageObservableArray.lastItemOnPage()).to.equal(singlePageObservableArray().length);
     });
-    
+
     it("hasPreviousPage is false", function () {
       expect(singlePageObservableArray.hasPreviousPage()).to.be.false;
     });
-    
+
     it("hasNextPage is false", function () {
       expect(singlePageObservableArray.hasNextPage()).to.be.false;
     });
-    
+
     it("isFirstPage is true", function () {
       expect(singlePageObservableArray.isFirstPage()).to.be.true;
     });
-    
+
     it("isLastPage is true", function () {
       expect(singlePageObservableArray.isLastPage()).to.be.true;
     });
-      
+
     it("pageItems returns all array elements", function () {
       expect(singlePageObservableArray.pageItems()).to.deep.equal(singlePageObservableArray());
     });
-    
+
     it("toNextPage does not change pageNumber", function () {
-      var oldPageNumber = singlePageObservableArray.pageNumber();      
-      singlePageObservableArray.toNextPage();      
+      var oldPageNumber = singlePageObservableArray.pageNumber();
+      singlePageObservableArray.toNextPage();
       expect(singlePageObservableArray.pageNumber()).to.equal(oldPageNumber);
     });
-    
+
     it("toPreviousPage does not change pageNumber", function () {
-      var oldPageNumber = singlePageObservableArray.pageNumber();      
-      singlePageObservableArray.toPreviousPage();      
+      var oldPageNumber = singlePageObservableArray.pageNumber();
+      singlePageObservableArray.toPreviousPage();
       expect(singlePageObservableArray.pageNumber()).to.equal(oldPageNumber);
     });
-    
+
     it("toFirstPage does not change pageNumber", function () {
-      var oldPageNumber = singlePageObservableArray.pageNumber();      
-      singlePageObservableArray.toFirstPage();      
+      var oldPageNumber = singlePageObservableArray.pageNumber();
+      singlePageObservableArray.toFirstPage();
       expect(singlePageObservableArray.pageNumber()).to.equal(oldPageNumber);
     });
-    
+
     it("toLastPage does not change pageNumber", function () {
-      var oldPageNumber = singlePageObservableArray.pageNumber();      
-      singlePageObservableArray.toLastPage();      
+      var oldPageNumber = singlePageObservableArray.pageNumber();
+      singlePageObservableArray.toLastPage();
       expect(singlePageObservableArray.pageNumber()).to.equal(oldPageNumber);
+    });
+
+    it("pageItems should not notify subscribers", function () {
+      emptyObservableArray.pageItems.subscribe(spy);
+      emptyObservableArray.toLastPage();
+      expect(spy).to.not.have.been.called;
     });
   });
-    
-  context("on multi-page paged observable array", function () {    
+
+  context("on multi-page paged observable array", function () {
     context("with current page is first page", function () {
-      beforeEach(function() {
+      beforeEach(function () {
         smallNumberPagesObservableArray.pageNumber(1);
       });
-    
+
       it("itemCount is number of elements in array", function () {
         expect(smallNumberPagesObservableArray.itemCount()).to.equal(smallNumberPagesObservableArray().length);
       });
-      
+
       it("pageCount is correct", function () {
         expect(smallNumberPagesObservableArray.pageCount()).to.equal(3);
       });
-      
+
       it("firstItemOnPage is correct", function () {
         expect(smallNumberPagesObservableArray.firstItemOnPage()).to.equal(1);
       });
-      
+
       it("lastItemOnPage is correct", function () {
         expect(smallNumberPagesObservableArray.lastItemOnPage()).to.equal(3);
       });
-      
+
       it("hasPreviousPage is false", function () {
         expect(smallNumberPagesObservableArray.hasPreviousPage()).to.be.false;
       });
-      
+
       it("hasNextPage is true", function () {
         expect(smallNumberPagesObservableArray.hasNextPage()).to.be.true;
       });
-      
+
       it("isFirstPage is true", function () {
         expect(smallNumberPagesObservableArray.isFirstPage()).to.be.true;
       });
-      
+
       it("isLastPage is false", function () {
         expect(smallNumberPagesObservableArray.isLastPage()).to.be.false;
       });
-      
+
       it("pageItems returns all array elements on page", function () {
         expect(smallNumberPagesObservableArray.pageItems()).to.deep.equal([1, 2, 3]);
       });
-      
+
       it("toNextPage increments pageNumber", function () {
-        var oldPageNumber = smallNumberPagesObservableArray.pageNumber();      
-        smallNumberPagesObservableArray.toNextPage();      
+        var oldPageNumber = smallNumberPagesObservableArray.pageNumber();
+        smallNumberPagesObservableArray.toNextPage();
         expect(smallNumberPagesObservableArray.pageNumber()).to.equal(oldPageNumber + 1);
       });
-      
+
       it("toPreviousPage does not change pageNumber", function () {
-        var oldPageNumber = smallNumberPagesObservableArray.pageNumber();      
-        smallNumberPagesObservableArray.toPreviousPage();      
+        var oldPageNumber = smallNumberPagesObservableArray.pageNumber();
+        smallNumberPagesObservableArray.toPreviousPage();
         expect(smallNumberPagesObservableArray.pageNumber()).to.equal(oldPageNumber);
       });
-      
+
       it("toFirstPage does not change pageNumber", function () {
-        var oldPageNumber = smallNumberPagesObservableArray.pageNumber();      
-        smallNumberPagesObservableArray.toFirstPage();      
+        var oldPageNumber = smallNumberPagesObservableArray.pageNumber();
+        smallNumberPagesObservableArray.toFirstPage();
         expect(smallNumberPagesObservableArray.pageNumber()).to.equal(oldPageNumber);
       });
-      
+
       it("toLastPage sets pageNumber to last page", function () {
-        smallNumberPagesObservableArray.toLastPage();      
+        smallNumberPagesObservableArray.toLastPage();
         expect(smallNumberPagesObservableArray.pageNumber()).to.equal(smallNumberPagesObservableArray.pageCount());
-      });    
+      });
     });
-    
+
+    context("when pageNumber change", function () {
+      context("and is smallNumberPages", function () {
+        beforeEach(function () {
+          smallNumberPagesObservableArray.pageItems.subscribe(spy);
+        });
+
+        it("pageItems should notify subscribers only once", function (done) {
+          smallNumberPagesObservableArray.toLastPage();
+          setTimeout(function () {
+            done();
+            expect(spy).to.have.been.calledOnce;
+          }, 1);
+        });
+      });
+
+      context("and is largeNumberPages", function () {
+        beforeEach(function () {
+          largeNumberPagesObservableArray.pageItems.subscribe(spy);
+        });
+
+        it("pageItems should notify subscribers only once", function (done) {
+          largeNumberPagesObservableArray.toLastPage();
+          setTimeout(function () {
+            done();
+            expect(spy).to.have.been.calledOnce;
+          }, 1);
+        });
+      });
+    });
+
     context("with current page is middle page", function () {
-      beforeEach(function() {
+      beforeEach(function () {
         smallNumberPagesObservableArray.pageNumber(2);
       });
-    
+
       it("itemCount is number of elements in array", function () {
         expect(smallNumberPagesObservableArray.itemCount()).to.equal(smallNumberPagesObservableArray().length);
       });
-      
+
       it("pageCount is correct", function () {
         expect(smallNumberPagesObservableArray.pageCount()).to.equal(3);
       });
-      
+
       it("firstItemOnPage is correct", function () {
         expect(smallNumberPagesObservableArray.firstItemOnPage()).to.equal(4);
       });
-      
+
       it("lastItemOnPage is correct", function () {
         expect(smallNumberPagesObservableArray.lastItemOnPage()).to.equal(6);
       });
-      
+
       it("hasPreviousPage is true", function () {
         expect(smallNumberPagesObservableArray.hasPreviousPage()).to.be.true;
       });
-      
+
       it("hasNextPage is true", function () {
         expect(smallNumberPagesObservableArray.hasNextPage()).to.be.true;
       });
-      
+
       it("isFirstPage is false", function () {
         expect(smallNumberPagesObservableArray.isFirstPage()).to.be.false;
       });
-      
+
       it("isLastPage is false", function () {
         expect(smallNumberPagesObservableArray.isLastPage()).to.be.false;
       });
-      
+
       it("pageItems returns all array elements on page", function () {
         expect(smallNumberPagesObservableArray.pageItems()).to.deep.equal([4, 5, 6]);
       });
-      
+
       it("toNextPage increments pageNumber", function () {
-        var oldPageNumber = smallNumberPagesObservableArray.pageNumber();      
-        smallNumberPagesObservableArray.toNextPage();      
+        var oldPageNumber = smallNumberPagesObservableArray.pageNumber();
+        smallNumberPagesObservableArray.toNextPage();
         expect(smallNumberPagesObservableArray.pageNumber()).to.equal(oldPageNumber + 1);
       });
-      
+
       it("toPreviousPage decrements pageNumber", function () {
-        var oldPageNumber = smallNumberPagesObservableArray.pageNumber();      
-        smallNumberPagesObservableArray.toPreviousPage();      
+        var oldPageNumber = smallNumberPagesObservableArray.pageNumber();
+        smallNumberPagesObservableArray.toPreviousPage();
         expect(smallNumberPagesObservableArray.pageNumber()).to.equal(oldPageNumber - 1);
       });
-      
+
       it("toFirstPage sets pageNumber to first page", function () {
-        smallNumberPagesObservableArray.toFirstPage();      
+        smallNumberPagesObservableArray.toFirstPage();
         expect(smallNumberPagesObservableArray.pageNumber()).to.equal(1);
       });
-      
+
       it("toLastPage sets pageNumber to last page", function () {
-        smallNumberPagesObservableArray.toLastPage();      
+        smallNumberPagesObservableArray.toLastPage();
         expect(smallNumberPagesObservableArray.pageNumber()).to.equal(smallNumberPagesObservableArray.pageCount());
-      });    
+      });
     });
-    
+
     context("with current page is last page", function () {
-      beforeEach(function() {
+      beforeEach(function () {
         smallNumberPagesObservableArray.pageNumber(3);
       });
-    
+
       it("itemCount is number of elements in array", function () {
         expect(smallNumberPagesObservableArray.itemCount()).to.equal(smallNumberPagesObservableArray().length);
       });
-      
+
       it("pageCount is correct", function () {
         expect(smallNumberPagesObservableArray.pageCount()).to.equal(3);
       });
-      
+
       it("firstItemOnPage is correct", function () {
         expect(smallNumberPagesObservableArray.firstItemOnPage()).to.equal(7);
       });
-      
+
       it("lastItemOnPage is correct", function () {
         expect(smallNumberPagesObservableArray.lastItemOnPage()).to.equal(7);
       });
-      
+
       it("hasPreviousPage is true", function () {
         expect(smallNumberPagesObservableArray.hasPreviousPage()).to.be.true;
       });
-      
+
       it("hasNextPage is false", function () {
         expect(smallNumberPagesObservableArray.hasNextPage()).to.be.false;
       });
-      
+
       it("isFirstPage is false", function () {
         expect(smallNumberPagesObservableArray.isFirstPage()).to.be.false;
       });
-      
+
       it("isLastPage is true", function () {
         expect(smallNumberPagesObservableArray.isLastPage()).to.be.true;
       });
-      
+
       it("pageItems returns all array elements on page", function () {
         expect(smallNumberPagesObservableArray.pageItems()).to.deep.equal([7]);
       });
-      
+
       it("toNextPage does not change pageNumber", function () {
-        var oldPageNumber = smallNumberPagesObservableArray.pageNumber();      
-        smallNumberPagesObservableArray.toNextPage();      
+        var oldPageNumber = smallNumberPagesObservableArray.pageNumber();
+        smallNumberPagesObservableArray.toNextPage();
         expect(smallNumberPagesObservableArray.pageNumber()).to.equal(oldPageNumber);
       });
-      
+
       it("toPreviousPage decrements pageNumber", function () {
-        var oldPageNumber = smallNumberPagesObservableArray.pageNumber();      
-        smallNumberPagesObservableArray.toPreviousPage();      
+        var oldPageNumber = smallNumberPagesObservableArray.pageNumber();
+        smallNumberPagesObservableArray.toPreviousPage();
         expect(smallNumberPagesObservableArray.pageNumber()).to.equal(oldPageNumber - 1);
       });
-      
+
       it("toFirstPage sets pageNumber to first page", function () {
-        smallNumberPagesObservableArray.toFirstPage();      
+        smallNumberPagesObservableArray.toFirstPage();
         expect(smallNumberPagesObservableArray.pageNumber()).to.equal(1);
       });
-      
+
       it("toLastPage does not change pageNumber", function () {
-        var oldPageNumber = smallNumberPagesObservableArray.pageNumber();      
-        smallNumberPagesObservableArray.toLastPage();      
+        var oldPageNumber = smallNumberPagesObservableArray.pageNumber();
+        smallNumberPagesObservableArray.toLastPage();
         expect(smallNumberPagesObservableArray.pageNumber()).to.equal(oldPageNumber);
-      });    
+      });
     });
   });
-  
+
   context("constructor", function () {
     context("without options", function () {
       var pagedArrayWithoutOptions,
-          emptyOptions;
+        emptyOptions;
 
-      beforeEach(function() {
+      beforeEach(function () {
         emptyOptions = {};
         pagedArrayWithoutOptions = ko.observableArray([]).extend({ paged: emptyOptions });
       });
-      
+
       it("pageNumber is 1", function () {
         expect(pagedArrayWithoutOptions.pageNumber()).to.equal(1);
       });
-  
+
       it("pageSize is 50", function () {
         expect(pagedArrayWithoutOptions.pageSize()).to.equal(50);
       });
-  
+
       it("pageGenerator is default", function () {
         expect(pagedArrayWithoutOptions.pageGenerator).to.equal(ko.paging.generators['default']);
       });
-      
+
       it("pageNumber uses global default", function () {
         ko.paging.defaults.pageNumber = 2;
         pagedArrayWithoutOptions = ko.observableArray();
@@ -389,7 +441,7 @@ describe("paged extender", function () {
 
         expect(pagedArrayWithoutOptions.pageNumber()).to.equal(2);
       });
-  
+
       it("pageSize uses global default", function () {
         ko.paging.defaults.pageSize = 25;
         pagedArrayWithoutOptions = ko.observableArray();
@@ -398,32 +450,32 @@ describe("paged extender", function () {
         expect(pagedArrayWithoutOptions.pageSize()).to.equal(25);
       });
     });
-  
+
     context("with options", function () {
       var pagedArrayWithOptions,
-          options;
+        options;
 
-      beforeEach(function() {
+      beforeEach(function () {
         options = { pageNumber: 3, pageSize: 25 };
         pagedArrayWithOptions = ko.observableArray(createRange(1, 7)).extend({ paged: options });
       });
-      
+
       it("pageNumber is equal to supplied option value", function () {
         expect(pagedArrayWithOptions.pageNumber()).to.equal(options.pageNumber);
       });
-  
+
       it("pageSize is equal to supplied option value", function () {
         expect(pagedArrayWithOptions.pageSize()).to.equal(options.pageSize);
       });
 
       var pageGeneratorNames = ['default'];
-      
-      pageGeneratorNames.forEach(function(pageGeneratorName) {
+
+      pageGeneratorNames.forEach(function (pageGeneratorName) {
         it("pageGenerator is equal to page generator with supplied option value", function () {
           expect(pagedArrayWithOptions.pageGenerator).to.equal(ko.paging.generators[pageGeneratorName]);
         });
       });
-  
+
       it("pageGenerator is equal to custom page generator with supplied option value", function () {
         var customPageGenerator = function (pagedObservable) { return []; }
         ko.paging.generators['custom'] = customPageGenerator;
@@ -432,24 +484,24 @@ describe("paged extender", function () {
 
         expect(pagedArrayWithOptions.pageGenerator).to.equal(customPageGenerator);
       });
-      
+
       var numbersLessThenZero = [0, -1, -3];
-      
-      numbersLessThenZero.forEach(function(invalidNumber) {
+
+      numbersLessThenZero.forEach(function (invalidNumber) {
         it("pageNumber less than 1 throws", function () {
           options = { pageNumber: invalidNumber };
           expect(pagedArrayWithOptions.extend.bind(pagedArrayWithOptions, { paged: options })).to.throw(Error);
         });
-        
+
         it("pageSize less than 1 throws", function () {
           options = { pageSize: invalidNumber };
           expect(pagedArrayWithOptions.extend.bind(pagedArrayWithOptions, { paged: options })).to.throw(Error);
         });
       });
-      
+
       var unknownPageGeneratorNames = [null, '', 'unknown'];
-      
-      unknownPageGeneratorNames.forEach(function(unknownPageGeneratorName) {
+
+      unknownPageGeneratorNames.forEach(function (unknownPageGeneratorName) {
         it("pageGenerator with unknown name throws", function () {
           options = { pageGenerator: unknownPageGeneratorName };
           expect(pagedArrayWithOptions.extend.bind(pagedArrayWithOptions, { paged: options })).to.throw(Error);
@@ -457,19 +509,19 @@ describe("paged extender", function () {
       });
     });
 
-    context("with initial value is", function() {
+    context("with initial value is", function () {
       it("empty array works", function () {
         var pagedArray = ko.observableArray([]).extend({ paged: {} });
         expect(pagedArray()).to.deep.equal([]);
       });
-  
+
       it("non-empty array works", function () {
         var pagedArray = ko.observableArray([1, 2, 3]).extend({ paged: {} });
         expect(pagedArray()).to.deep.equal([1, 2, 3]);
       });
     });
   });
-  
+
   context("observable value", function () {
     it("pageNumber can be explicitly set", function () {
       singlePageObservableArray.pageNumber(2);
@@ -481,10 +533,10 @@ describe("paged extender", function () {
       expect(singlePageObservableArray.pageSize()).to.equal(10);
     });
   });
-  
+
   context("page generators", function () {
     context("default page generator", function () {
-      beforeEach(function() {
+      beforeEach(function () {
         singlePageObservableArray['pageGenerator'] = ko.paging.generators['default'];
         smallNumberPagesObservableArray['pageGenerator'] = ko.paging.generators['default'];
         largeNumberPagesObservableArray['pageGenerator'] = ko.paging.generators['default'];
@@ -524,7 +576,7 @@ describe("paged extender", function () {
     });
 
     context("sliding page generator", function () {
-      beforeEach(function() {
+      beforeEach(function () {
         ko.paging.generators['sliding'].windowSize(5);
 
         singlePageObservableArray['pageGenerator'] = ko.paging.generators['sliding'];
@@ -602,15 +654,15 @@ describe("paged extender", function () {
     });
 
     context("custom page generator", function () {
-      before(function() {
+      before(function () {
         ko.paging.generators['custom'] = {
-          generate: function(pagedObservable) {
+          generate: function (pagedObservable) {
             return createRange(0, pagedObservable.pageCount() - 1);
           }
         }
       });
 
-      beforeEach(function() {
+      beforeEach(function () {
         singlePageObservableArray['pageGenerator'] = ko.paging.generators['custom'];
         smallNumberPagesObservableArray['pageGenerator'] = ko.paging.generators['custom'];
         largeNumberPagesObservableArray['pageGenerator'] = ko.paging.generators['custom'];
@@ -649,7 +701,7 @@ describe("paged extender", function () {
       });
     });
   });
-  
+
   context("created using ko.pagedObservableArray", function () {
     it("works without parameters", function () {
       var pagedObservableArray = ko.pagedObservableArray();

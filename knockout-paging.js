@@ -96,7 +96,7 @@
       'default': new DefaultPageGenerator(),
       'sliding': new SlidingPageGenerator()
     }
-  }
+  };
 
   // This extender adds paging functionality to a Knockout observable array.
   // The target must be an observable array, otherwise an error is thrown.
@@ -128,6 +128,7 @@
     target.pageItems = ko.pureComputed(function() {
       return target().slice(target.firstItemOnPage() - 1, target.lastItemOnPage());
     });
+    target.pageItems.extend({ rateLimit: 1 });
 
     target.pageCount = ko.pureComputed(function() {
       if (target.itemCount() <= 0) {

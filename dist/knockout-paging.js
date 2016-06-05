@@ -121,8 +121,36 @@
       throw new Error('The page generator could not be found.');
     }
 
-    target.pageNumber = ko.observable(options && options['pageNumber'] || ko.paging.defaults.pageNumber || 1);
-    target.pageSize = ko.observable(options && options['pageSize'] || ko.paging.defaults.pageSize || 50);
+    // We use this field as a backing field for the pageNumber computed observable,
+    // as we want to do some additional validation
+    var _pageNumber = ko.observable(options && options['pageNumber'] || ko.paging.defaults.pageNumber || 1);    
+    target.pageNumber = ko.pureComputed({
+      read: function () {
+        return _pageNumber();
+      },
+      write: function (value) {
+        _pageNumber(Math.min(Math.max(1, value), target.pageCount()));
+      },
+      owner: target
+    });
+    
+    // We use this field as a backing field for the pageNumber computed observable,
+    // as we want to do some additional validation
+    var _pageSize = ko.observable(options && options['pageSize'] || ko.paging.defaults.pageSize || 50);    
+    target.pageSize = ko.pureComputed({
+      read: function () {
+        return _pageSize();
+      },
+      write: function (value) {                  
+          _pageSize(value);
+          
+          if (target.pageNumber() > target.pageCount()) {
+             target.pageNumber(target.pageCount());
+          }
+      },
+      owner: target
+    });
+    
     target.pageGenerator = ko.paging.generators[options && options['pageGenerator'] || 'default'];
 
     target.pageItems = ko.pureComputed(function() {

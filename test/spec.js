@@ -523,14 +523,46 @@ describe("paged extender", function () {
   });
 
   context("observable value", function () {
-    it("pageNumber can be explicitly set", function () {
-      singlePageObservableArray.pageNumber(2);
-      expect(singlePageObservableArray.pageNumber()).to.equal(2);
+    context("pageNumber", function () {
+      it("can be explicitly set to value within range", function () {
+        smallNumberPagesObservableArray.pageNumber(2);
+        expect(smallNumberPagesObservableArray.pageNumber()).to.equal(2);
+      });
+      
+      var tooSmallPageNumbers = [0, -1, -23];
+      tooSmallPageNumbers.forEach(function (tooSmallPageNumber) {
+        it("with value less than firstPage sets value to firstPage", function () {
+          smallNumberPagesObservableArray.pageNumber(tooSmallPageNumber);
+          expect(smallNumberPagesObservableArray.pageNumber()).to.equal(1);
+        });
+      });
+            
+      var tooLargePageNumbers = [4, 5, 19];
+      tooLargePageNumbers.forEach(function (tooLargePageNumber) {
+        it("with value greater than lastPage sets value to lastPage", function () {
+          smallNumberPagesObservableArray.pageNumber(tooLargePageNumber);
+          expect(smallNumberPagesObservableArray.pageNumber()).to.equal(smallNumberPagesObservableArray.pageCount());
+        });
+      });    
     });
 
-    it("pageSize can be explicitly set", function () {
-      singlePageObservableArray.pageSize(10);
-      expect(singlePageObservableArray.pageSize()).to.equal(10);
+    context("pageSize", function () {
+      it("can be explicitly set to value within range", function () {
+        singlePageObservableArray.pageSize(10);
+        expect(singlePageObservableArray.pageSize()).to.equal(10);
+      });  
+      
+      it("with value reducing pageCount updates pageNumber", function () {
+        smallNumberPagesObservableArray.pageNumber(3);
+        smallNumberPagesObservableArray.pageSize(4);
+        expect(smallNumberPagesObservableArray.pageNumber()).to.equal(2);
+      });
+      
+      it("with value increasing pageCount does not update pageNumber", function () {
+        var originalPageNumber = smallNumberPagesObservableArray.pageNumber();
+        smallNumberPagesObservableArray.pageSize(1);
+        expect(smallNumberPagesObservableArray.pageNumber()).to.equal(originalPageNumber);
+      });
     });
   });
 

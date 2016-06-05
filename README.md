@@ -260,6 +260,16 @@ There is a [JSBin demo](http://jsbin.com/liruyo/) that shows how the `paged` ext
      <th>Changes</th>
   </tr>
   <tr>
+     <td>2016-06-05</td>
+     <td>0.3.2</td>
+     <td>Fix incorrect pageNumber bug.</td>
+  </tr>
+  <tr>
+     <td>2016-06-04</td>
+     <td>0.3.1</td>
+     <td>Fix duplicate notification bug.</td>
+  </tr>
+  <tr>
      <td>2014-05-13</td>
      <td>0.2.1</td>
      <td>Added ko.pagedObservableArray shortcut method.</td>

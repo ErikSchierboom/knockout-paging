@@ -23,7 +23,7 @@
 
   // Utilities
   function isObservableArray(value) {
-    return ko.isObservable(value) && 'push' in value;
+    return ko.isObservable(value) && 'push' in ko.unwrap(value);
   }
 
   function createRange(min, max) {

@@ -21,9 +21,16 @@
   // --------
   "use strict";
 
+  // polyfill for IE < 9
+  if (!Array.isArray) {
+    Array.isArray = function(arg) {
+      return Object.prototype.toString.call(arg) === '[object Array]';
+    };
+  }
+
   // Utilities
   function isObservableArray(value) {
-    return ko.isObservable(value) && 'push' in value;
+    return ko.isObservable(value) && Array.isArray(ko.unwrap(value));
   }
 
   function createRange(min, max) {

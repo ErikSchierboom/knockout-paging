@@ -24,7 +24,8 @@ describe("paged extender", function () {
     emptyObservableArray,
     singlePageObservableArray,
     smallNumberPagesObservableArray,
-    largeNumberPagesObservableArray;
+    largeNumberPagesObservableArray,
+    smallNumberPagesComputedArray;
   spy = sinon.spy();
 
   beforeEach(function () {
@@ -41,12 +42,42 @@ describe("paged extender", function () {
     singlePageObservableArray = ko.observableArray([1]).extend({ paged: options });
     smallNumberPagesObservableArray = ko.observableArray(createRange(1, 7)).extend({ paged: options });
     largeNumberPagesObservableArray = ko.observableArray(createRange(1, 30)).extend({ paged: options });
+    smallNumberPagesComputedArray = ko.pureComputed(function () { return createRange(1, 7) }).extend( { paged: options });
   });
 
   context("on regular observable", function () {
     it("throws", function () {
-      var regularObservable = ko.observable();
+      var regularObservable = ko.observable('foo');
       expect(regularObservable.extend.bind(regularObservable, { paged: {} })).to.throw(Error);
+    });
+  });
+
+  context("on computed observable that does not return an array", function () {
+    it("throws", function () {
+      var computedObservable = ko.pureComputed(function() {
+        return 'foo';
+      });
+      expect(computedObservable.extend.bind(computedObservable, { paged: {} })).to.throw(Error);
+    });
+  });
+
+  context("on computed observable that returns an array", function () {
+    var computedObservable = ko.pureComputed(function() {
+      return createRange(1, 7);
+    });
+    it("does not throw", function () {
+      expect(computedObservable.extend.bind(computedObservable, { paged: {} })).to.not.throw(Error);
+    });
+    context("on multi-page paged computed array", function () {
+      it("itemCount is the same as for multi-page paged observable array", function() {
+        expect(smallNumberPagesComputedArray.itemCount()).to.equal(smallNumberPagesObservableArray.itemCount());
+      });
+      it("pageItems is the same as for multi-page paged observable array", function() {
+        expect(smallNumberPagesComputedArray.pageItems()).to.deep.equal(smallNumberPagesObservableArray.pageItems());
+      });
+      it("pages is the same as for multi-page paged observable array", function() {
+        expect(smallNumberPagesComputedArray.pages()).to.deep.equal(smallNumberPagesObservableArray.pages());
+      });
     });
   });
 

@@ -46,9 +46,18 @@ describe("paged extender", function () {
   });
 
   context("on regular observable", function () {
-    it("throws", function () {
-      var regularObservable = ko.observable('foo');
-      expect(regularObservable.extend.bind(regularObservable, { paged: {} })).to.throw(Error);
+    context("with non-array value", function () {
+      it("throws", function () {
+        var regularObservable = ko.observable('foo');
+        expect(regularObservable.extend.bind(regularObservable, { paged: {} })).to.throw(Error);
+      });
+    });
+
+    context("without value", function () {
+      it("throws", function () {
+        var regularObservable = ko.observable();
+        expect(regularObservable.extend.bind(regularObservable, { paged: {} })).to.throw(Error);
+      });
     });
   });
 

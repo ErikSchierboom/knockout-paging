@@ -260,6 +260,11 @@ There is a [JSBin demo](http://jsbin.com/liruyo/) that shows how the `paged` ext
      <th>Changes</th>
   </tr>
   <tr>
+     <td>2016-08-02</td>
+     <td>0.4.0</td>
+     <td>Allow the extender to work on computed observables (thanks to <a href="https://github.com/ErikSchierboom/knockout-paging/pull/17" title="markovdb">markovdb</a>).</td>
+  </tr>
+  <tr>
      <td>2016-06-05</td>
      <td>0.3.2</td>
      <td>Fix incorrect pageNumber bug.</td>

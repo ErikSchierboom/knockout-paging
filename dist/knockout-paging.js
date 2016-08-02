@@ -1,5 +1,5 @@
 /*!
-  Knockout paged extender 0.3.2
+  Knockout paged extender 0.4.0
   By: Erik Schierboom (C) 2015
   License: Apache 2
 
@@ -21,9 +21,16 @@
   // --------
   "use strict";
 
+  // polyfill for IE < 9
+  if (!Array.isArray) {
+    Array.isArray = function(arg) {
+      return Object.prototype.toString.call(arg) === '[object Array]';
+    };
+  }
+
   // Utilities
   function isObservableArray(value) {
-    return ko.isObservable(value) && 'push' in value;
+    return ko.isObservable(value) && Array.isArray(ko.unwrap(value));
   }
 
   function createRange(min, max) {

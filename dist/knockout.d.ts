@@ -5,18 +5,12 @@
 
 
 interface KnockoutSubscribableFunctions<T> {
-    // [key: string]: KnockoutBindingHandler;
-
     notifySubscribers(valueToWrite?: T, event?: string): void;
 }
 
-interface KnockoutComputedFunctions<T> {
-    // [key: string]: KnockoutBindingHandler;
-}
+interface KnockoutComputedFunctions<T> {}
 
 interface KnockoutObservableFunctions<T> {
-    // [key: string]: KnockoutBindingHandler;
-
     equalityComparer(a: any, b: any): boolean;
 }
 
@@ -149,8 +143,6 @@ interface KnockoutBindingHandler {
 }
 
 interface KnockoutBindingHandlers {
-    // [bindingHandler: string]: KnockoutBindingHandler;
-
     // Controlling text and appearance
     visible: KnockoutBindingHandler;
     text: KnockoutBindingHandler;

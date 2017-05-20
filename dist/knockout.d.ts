@@ -5,18 +5,12 @@
 
 
 interface KnockoutSubscribableFunctions<T> {
-    [key: string]: KnockoutBindingHandler;
-
     notifySubscribers(valueToWrite?: T, event?: string): void;
 }
 
-interface KnockoutComputedFunctions<T> {
-    [key: string]: KnockoutBindingHandler;
-}
+interface KnockoutComputedFunctions<T> {}
 
 interface KnockoutObservableFunctions<T> {
-    [key: string]: KnockoutBindingHandler;
-
     equalityComparer(a: any, b: any): boolean;
 }
 
@@ -33,9 +27,6 @@ interface KnockoutObservableArrayFunctions<T> {
     reverse(): T[];
     sort(): void;
     sort(compareFunction: (left: T, right: T) => number): void;
-
-    // Ko specific
-    [key: string]: KnockoutBindingHandler;
 
     replace(oldItem: T, newItem: T): void;
 
@@ -149,8 +140,6 @@ interface KnockoutBindingHandler {
 }
 
 interface KnockoutBindingHandlers {
-    [bindingHandler: string]: KnockoutBindingHandler;
-
     // Controlling text and appearance
     visible: KnockoutBindingHandler;
     text: KnockoutBindingHandler;
@@ -324,7 +313,7 @@ interface KnockoutUtils {
 }
 
 interface KnockoutArrayChange<T> {
-    status: string;
+    status: "added" | "deleted" | "retained";
     value: T;
     index: number;
     moved?: number;
@@ -510,11 +499,6 @@ interface KnockoutStatic {
     renderTemplateForEach(template: Function, arrayOrObservableArray: KnockoutObservable<any>, options: Object, targetNode: Node, parentBindingContext: KnockoutBindingContext): any;
     renderTemplateForEach(template: any, arrayOrObservableArray: KnockoutObservable<any>, options: Object, targetNode: Node, parentBindingContext: KnockoutBindingContext): any;
 
-    expressionRewriting: {
-        bindingRewriteValidators: any;
-        parseObjectLiteral: { (objectLiteralString: string): any[] }
-    };
-
     /////////////////////////////////
 
     bindingProvider: {
@@ -623,7 +607,3 @@ interface KnockoutComponents {
 }
 
 declare var ko: KnockoutStatic;
-
-declare module "knockout" {
-    export = ko;
-}

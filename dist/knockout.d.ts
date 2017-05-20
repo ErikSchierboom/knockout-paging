@@ -28,9 +28,6 @@ interface KnockoutObservableArrayFunctions<T> {
     sort(): void;
     sort(compareFunction: (left: T, right: T) => number): void;
 
-    // Ko specific
-    // [key: string]: KnockoutBindingHandler;
-
     replace(oldItem: T, newItem: T): void;
 
     remove(item: T): T[];

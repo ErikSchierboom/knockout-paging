@@ -6,62 +6,68 @@
 /// <reference path="./knockout.d.ts" />
 
 interface KnockoutStatic {
-    paging: KnockoutPagingOptions;
-	pagedObservableArray<T>(initialValue?: T[], options?: KnockoutPagedOptions): KnockoutPagedObservableArray<T>;
+  paging: KnockoutPagingOptions;
+  pagedObservableArray<T>(
+    initialValue?: T[],
+    options?: KnockoutPagedOptions
+  ): KnockoutPagedObservableArray<T>;
 }
 
 interface KnockoutPagingOptions {
-    defaults: KnockoutPagingDefaultOptions;
-    generators: { 
-    	[name: string]: KnockoutPageGenerator; 
-		'sliding': KnockoutSlidingPageGenerator
-    }
+  defaults: KnockoutPagingDefaultOptions;
+  generators: {
+    [name: string]: KnockoutPageGenerator;
+    sliding: KnockoutSlidingPageGenerator;
+  };
 }
 
 interface KnockoutPagingDefaultOptions {
-    pageNumber: number;
-    pageSize: number;
+  pageNumber: number;
+  pageSize: number;
 }
 
 interface KnockoutPagedObservableArray<T> extends KnockoutObservableArray<T> {
-    pageSize: KnockoutObservable<number>;
-    pageNumber: KnockoutObservable<number>;
+  pageSize: KnockoutObservable<number>;
+  pageNumber: KnockoutObservable<number>;
 
-    pageItems: KnockoutComputed<T[]>;
-    pageCount: KnockoutComputed<number>;
-    itemCount: KnockoutComputed<number>;
-    firstItemOnPage: KnockoutComputed<number>;
-    lastItemOnPage: KnockoutComputed<number>;
-    hasPreviousPage: KnockoutComputed<boolean>;
-    hasNextPage: KnockoutComputed<boolean>;
-    isFirstPage: KnockoutComputed<boolean>;
-    isLastPage: KnockoutComputed<boolean>;
-    pages: KnockoutComputed<number[]>;
+  pageItems: KnockoutComputed<T[]>;
+  pageCount: KnockoutComputed<number>;
+  itemCount: KnockoutComputed<number>;
+  firstItemOnPage: KnockoutComputed<number>;
+  lastItemOnPage: KnockoutComputed<number>;
+  hasPreviousPage: KnockoutComputed<boolean>;
+  hasNextPage: KnockoutComputed<boolean>;
+  isFirstPage: KnockoutComputed<boolean>;
+  isLastPage: KnockoutComputed<boolean>;
+  pages: KnockoutComputed<number[]>;
 
-    toNextPage(): void;
-    toPreviousPage(): void;
-    toLastPage(): void;
-    toFirstPage(): void;
+  toNextPage(): void;
+  toPreviousPage(): void;
+  toLastPage(): void;
+  toFirstPage(): void;
 }
 
 interface KnockoutPagedOptions {
-    pageSize?: number;
-    pageNumber?: number;
-    pageGenerator?: string;
+  pageSize?: number;
+  pageNumber?: number;
+  pageGenerator?: string;
 }
 
 interface KnockoutObservableArray<T> {
-    extend(requestedExtenders: { 'paged': any; }): KnockoutPagedObservableArray<T>;
+  extend(requestedExtenders: { paged: any }): KnockoutPagedObservableArray<T>;
 }
 
 interface KnockoutPageGenerator {
-	generate<T>(pagedObservable: KnockoutPagedObservableArray<T>): number[];
+  generate<T>(pagedObservable: KnockoutPagedObservableArray<T>): number[];
 }
 
 interface KnockoutSlidingPageGenerator extends KnockoutPageGenerator {
-	windowSize: KnockoutObservable<number>;
+  windowSize: KnockoutObservable<number>;
 }
 
 interface KnockoutExtenders {
-    paged(target: KnockoutObservableArray<any>, options: KnockoutPagedOptions): KnockoutObservableArray<any>;
+  paged(
+    target: KnockoutObservableArray<any>,
+    options: KnockoutPagedOptions
+  ): KnockoutObservableArray<any>;
 }

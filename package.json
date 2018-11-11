@@ -13,11 +13,13 @@
     "dist"
   ],
   "scripts": {
-    "ci": "npm run test && npm run build",
+    "ci": "npm run format:verify && npm run test && npm run build",
     "build": "cpx 'knockout*.{js,ts}' dist/ && replace '{{ version }}' $npm_package_version dist/knockout-paging.js && uglifyjs dist/knockout-paging.js -o dist/knockout-paging.min.js",
     "test": "mocha test/spec.js",
     "coverage": "mocha --require blanket -R html-cov > coverage/coverage.html",
-    "coveralls": "mocha --require blanket -R mocha-lcov-reporter > coverage/coverage.lcov"
+    "coveralls": "mocha --require blanket -R mocha-lcov-reporter > coverage/coverage.lcov",
+    "format": "prettier --write '**/*.{js,jsx,ts,tsx,json,md,css,scss}'",
+    "format:verify": "prettier --list-different '**/*.{js,jsx,ts,tsx,json,md,css,scss}'"
   },
   "repository": {
     "type": "git",
@@ -45,6 +47,7 @@
     "cpx": "^1.5.0",
     "mocha": "^2.3.3",
     "mocha-lcov-reporter": "^1.0.0",
+    "prettier": "^1.15.2",
     "replace": "^1.0.0",
     "uglify-js": "^3.4.9",
     "sinon": "^1.17.4",

@@ -29,7 +29,7 @@ describe("paged extender", function() {
   spy = sinon.spy();
 
   beforeEach(function() {
-    spy.reset();
+    spy.resetHistory();
 
     var options = { pageSize: 3 };
 

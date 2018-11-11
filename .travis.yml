@@ -1,6 +1,4 @@
 language: node_js
-before_install:
-  - npm install -g gulp
-script: gulp ci
+script: npm run ci
 after_success:
   - NODE_ENV=test YOURPACKAGE_COVERAGE=1 ./node_modules/.bin/mocha --require blanket --reporter mocha-lcov-reporter | ./node_modules/coveralls/bin/coveralls.js
